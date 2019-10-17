@@ -1,7 +1,7 @@
 package examples.newtypes
 
-import cats.implicits._
 import cats.effect._
+import cats.implicits._
 import io.estatico.newtype.Coercible
 import io.estatico.newtype.macros._
 import io.estatico.newtype.ops._

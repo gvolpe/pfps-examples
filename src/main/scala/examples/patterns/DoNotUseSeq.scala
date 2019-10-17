@@ -1,4 +1,4 @@
-package examples
+package examples.patterns
 
 import cats.effect._
 import cats.implicits._
@@ -6,6 +6,7 @@ import cats.effect.Console.io._
 import scala.concurrent.duration._
 
 object DoNotUseSeq extends IOApp {
+
   val inf: LazyList[Int] = 1 #:: inf.map(_ + 1)
   //val inf: Stream[Int] = 1 #:: inf.map(_ + 1)
   def api: IO[Seq[Int]] = IO.pure(inf)

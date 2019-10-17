@@ -1,4 +1,4 @@
-package examples
+package examples.patterns
 
 import cats._
 import cats.effect._
@@ -26,14 +26,14 @@ sealed trait BusinessError extends NoStackTrace
 case object RandomError extends BusinessError
 //case object AnotherError extends BusinessError // uncomment to see issue
 
-trait CategoryService[F[_]] {
+trait Categories[F[_]] {
   def findAll: F[List[Category]]
   def maybeFindAll: F[Either[BusinessError, List[Category]]]
 }
 
-class LiveCategoryService[
+class LiveCategories[
     F[_]: MonadError[?[_], Throwable]: Random
-] extends CategoryService[F] {
+] extends Categories[F] {
 
   def findAll: F[List[Category]] =
     Random[F].bool.ifM(
@@ -50,11 +50,11 @@ class LiveCategoryService[
 }
 
 class Program[F[_]: Functor](
-    category: CategoryService[F]
+    categories: Categories[F]
 ) {
 
-  def categories: F[List[Category]] =
-    category.maybeFindAll.map {
+  def finfAll: F[List[Category]] =
+    categories.maybeFindAll.map {
       case Right(c)          => c
       case Left(RandomError) => List.empty[Category]
     }
@@ -62,11 +62,11 @@ class Program[F[_]: Functor](
 }
 
 class SameProgram[F[_]: ApplicativeError[?[_], Throwable]](
-    category: CategoryService[F]
+    categories: Categories[F]
 ) {
 
-  def categories: F[List[Category]] =
-    category.findAll.handleError {
+  def findAll: F[List[Category]] =
+    categories.findAll.handleError {
       case RandomError => List.empty[Category]
     }
 

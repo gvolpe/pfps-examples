@@ -1,6 +1,4 @@
-package examples
-
-// TODO: Move this into an `examples` project
+package examples.patterns
 
 import cats.effect._
 import cats.effect.concurrent.Semaphore
