@@ -3,7 +3,6 @@ package examples.patterns
 import cats.effect._
 import cats.implicits._
 import cats.effect.Console.io._
-import scala.concurrent.duration._
 
 object DoNotUseSeq extends IOApp {
 

@@ -2,10 +2,8 @@ package examples.newtypes
 
 import cats.effect._
 import cats.implicits._
-import io.estatico.newtype.Coercible
 import io.estatico.newtype.macros._
 import io.estatico.newtype.ops._
-import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.Contains

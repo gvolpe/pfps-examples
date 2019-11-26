@@ -32,7 +32,7 @@ trait Categories[F[_]] {
 }
 
 class LiveCategories[
-    F[_]: MonadError[?[_], Throwable]: Random
+    F[_]: MonadError[*[_], Throwable]: Random
 ] extends Categories[F] {
 
   def findAll: F[List[Category]] =
@@ -61,7 +61,7 @@ class Program[F[_]: Functor](
 
 }
 
-class SameProgram[F[_]: ApplicativeError[?[_], Throwable]](
+class SameProgram[F[_]: ApplicativeError[*[_], Throwable]](
     categories: Categories[F]
 ) {
 
