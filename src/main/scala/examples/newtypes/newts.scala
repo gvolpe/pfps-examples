@@ -61,6 +61,7 @@ object refinement {
 
 object refinednewts {
   @newtype case class Brand(value: NonEmptyString)
+  @newtype case class Category(value: NonEmptyString)
 
   val foo: Brand = ("a": NonEmptyString).coerce[Brand]
   val bar: Brand = Brand("a")

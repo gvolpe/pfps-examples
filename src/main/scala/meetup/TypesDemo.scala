@@ -12,7 +12,6 @@ import scala.util.control.NoStackTrace
 import shapeless._
 
 object TypesDemo extends IOApp {
-
   def putStrLn[A](a: A): IO[Unit] = IO(println(a))
 
   def showName(username: String, name: String, email: String): String =
@@ -44,9 +43,11 @@ object TypesDemo extends IOApp {
       )
     )
 
+  // TODO: Add abstract private class trick
+
   // ----------------- Newtypes -------------------
 
-  def showNameT(username: UserName, name: Name, email: Email): String =
+  def showNameT(username: UserNameT, name: NameT, email: EmailT): String =
     s"""
       Hi ${name.value}! Your username is ${username.value}
       and your email is ${email.value}.
@@ -55,22 +56,22 @@ object TypesDemo extends IOApp {
   val p2: IO[Unit] =
     putStrLn(
       showNameT(
-        "gvolpe@github.com".coerce[UserName],
-        "12345".coerce[Name],
-        "".coerce[Email]
+        "gvolpe@github.com".coerce[UserNameT],
+        "12345".coerce[NameT],
+        "".coerce[EmailT]
       )
     )
 
   // ----------------- Smart Constructors -------------------
 
-  def mkUsername(value: String): Option[UserName] =
-    if (value.nonEmpty) value.coerce[UserName].some else None
+  def mkUsername(value: String): Option[UserNameT] =
+    if (value.nonEmpty) value.coerce[UserNameT].some else None
 
-  def mkName(value: String): Option[Name] =
-    if (value.nonEmpty) value.coerce[Name].some else None
+  def mkName(value: String): Option[NameT] =
+    if (value.nonEmpty) value.coerce[NameT].some else None
 
-  def mkEmail(value: String): Option[Email] =
-    if (value.contains("@")) value.coerce[Email].some else None
+  def mkEmail(value: String): Option[EmailT] =
+    if (value.contains("@")) value.coerce[EmailT].some else None
 
   case object EmptyError extends NoStackTrace
   case object InvalidEmail extends NoStackTrace
@@ -96,9 +97,25 @@ object TypesDemo extends IOApp {
       showNameR("jr", "Joe", "jr@gmail.com")
     )
 
+  // ----------------- Newtypes + Refined -------------------
+
+  def showNameTR(username: UserName, name: Name, email: Email): String =
+    s"""
+      Hi ${name.value.value}! Your username is ${username.value.value}
+      and your email is ${email.value.value}.
+     """
+
+  val p5: IO[Unit] =
+    putStrLn(
+      showNameTR(
+        UserName("jr"),
+        Name("John"),
+        Email("foo@bar.com")
+      )
+    )
+
   def run(args: List[String]): IO[ExitCode] =
     p4.as(ExitCode.Success)
-
 }
 
 object types {
@@ -106,12 +123,15 @@ object types {
   case class NameV(value: String) extends AnyVal
   case class EmailV(value: String) extends AnyVal
 
-  @newtype case class UserName(value: String)
-  @newtype case class Name(value: String)
-  @newtype case class Email(value: String)
+  @newtype case class UserNameT(value: String)
+  @newtype case class NameT(value: String)
+  @newtype case class EmailT(value: String)
 
   type UserNameR = NonEmptyString
   type NameR     = NonEmptyString
   type EmailR    = String Refined Contains['@']
 
+  @newtype case class UserName(value: NonEmptyString)
+  @newtype case class Name(value: NonEmptyString)
+  @newtype case class Email(value: String Refined Contains['@'])
 }
