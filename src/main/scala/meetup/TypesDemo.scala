@@ -43,7 +43,25 @@ object TypesDemo extends IOApp {
       )
     )
 
-  // TODO: Add abstract private class trick
+  // ----------------- Sealed abstract case classes -------------------
+
+  def showNameP(username: UserNameP, name: NameP, email: EmailP): String =
+    s"""
+      Hi ${name.value}! Your username is ${username.value}
+      and your email is ${email.value}.
+     """
+
+  //new UserNameP("jr") {} // this only works because it's in the same file
+  // NameP("123") // does not compile
+
+  val p2: IO[Unit] =
+    (
+      UserNameP.make("jr"),
+      NameP.make("Joe Reef"),
+      EmailP.make("joe@bar.com")
+    ).tupled.fold(IO.unit) {
+      case (u, n, e) => putStrLn(showNameP(u, n, e))
+    }
 
   // ----------------- Newtypes -------------------
 
@@ -53,7 +71,7 @@ object TypesDemo extends IOApp {
       and your email is ${email.value}.
      """
 
-  val p2: IO[Unit] =
+  val p3: IO[Unit] =
     putStrLn(
       showNameT(
         "gvolpe@github.com".coerce[UserNameT],
@@ -76,7 +94,7 @@ object TypesDemo extends IOApp {
   case object EmptyError extends NoStackTrace
   case object InvalidEmail extends NoStackTrace
 
-  val p3: IO[Unit] =
+  val p4: IO[Unit] =
     for {
       u <- mkUsername("gvolpe").liftTo[IO](EmptyError)
       n <- mkName("George").liftTo[IO](EmptyError)
@@ -92,7 +110,7 @@ object TypesDemo extends IOApp {
       and your email is ${email.value}.
      """
 
-  val p4: IO[Unit] =
+  val p5: IO[Unit] =
     putStrLn(
       showNameR("jr", "Joe", "jr@gmail.com")
     )
@@ -105,7 +123,7 @@ object TypesDemo extends IOApp {
       and your email is ${email.value.value}.
      """
 
-  val p5: IO[Unit] =
+  val p6: IO[Unit] =
     putStrLn(
       showNameTR(
         UserName("jr"),
@@ -115,22 +133,45 @@ object TypesDemo extends IOApp {
     )
 
   def run(args: List[String]): IO[ExitCode] =
-    p4.as(ExitCode.Success)
+    p6.as(ExitCode.Success)
 }
 
 object types {
-  case class UserNameV(value: String) extends AnyVal
-  case class NameV(value: String) extends AnyVal
-  case class EmailV(value: String) extends AnyVal
+  // --- Value classes ---
+  final case class UserNameV(value: String) extends AnyVal
+  final case class NameV(value: String) extends AnyVal
+  final case class EmailV(value: String) extends AnyVal
 
+  // --- Sealed abstract case classes ---
+  sealed abstract case class UserNameP(value: String)
+  object UserNameP {
+    def make(value: String): Option[UserNameP] =
+      if (value.nonEmpty) new UserNameP(value) {}.some else None
+  }
+
+  sealed abstract case class NameP(value: String)
+  object NameP {
+    def make(value: String): Option[NameP] =
+      if (value.nonEmpty) new NameP(value) {}.some else None
+  }
+
+  sealed abstract case class EmailP(value: String)
+  object EmailP {
+    def make(value: String): Option[EmailP] =
+      if (value.contains("@")) new EmailP(value) {}.some else None
+  }
+
+  // --- Newtypes ---
   @newtype case class UserNameT(value: String)
   @newtype case class NameT(value: String)
   @newtype case class EmailT(value: String)
 
+  // --- Refinement types ---
   type UserNameR = NonEmptyString
   type NameR     = NonEmptyString
   type EmailR    = String Refined Contains['@']
 
+  // --- Newtypes + Refinement types ---
   @newtype case class UserName(value: NonEmptyString)
   @newtype case class Name(value: NonEmptyString)
   @newtype case class Email(value: String Refined Contains['@'])
