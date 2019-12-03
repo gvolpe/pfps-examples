@@ -3,7 +3,6 @@ package examples.newtypes
 import cats.effect._
 import cats.implicits._
 import io.estatico.newtype.macros._
-import io.estatico.newtype.ops._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.Contains
@@ -45,7 +44,7 @@ object newts {
   @newtype case class Username(value: String)
   @newtype case class Email(value: String)
 
-  val foo: Username = "gvolpe".coerce[Username]
+  val foo = Username("gvolpe")
 
   //val bar = foo.copy(value = "") // copy does not exist
 }
@@ -63,6 +62,5 @@ object refinednewts {
   @newtype case class Brand(value: NonEmptyString)
   @newtype case class Category(value: NonEmptyString)
 
-  val foo: Brand = ("a": NonEmptyString).coerce[Brand]
   val bar: Brand = Brand("a")
 }

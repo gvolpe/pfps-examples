@@ -3,7 +3,6 @@ package meetup
 import cats.effect._
 import cats.implicits._
 import io.estatico.newtype.macros._
-import io.estatico.newtype.ops._
 import eu.timepit.refined.api._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.Contains
@@ -74,22 +73,22 @@ object TypesDemo extends IOApp {
   val p3: IO[Unit] =
     putStrLn(
       showNameT(
-        "gvolpe@github.com".coerce[UserNameT],
-        "12345".coerce[NameT],
-        "".coerce[EmailT]
+        UserNameT("gvolpe@github.com"),
+        NameT("12345"),
+        EmailT("")
       )
     )
 
   // ----------------- Smart Constructors -------------------
 
   def mkUsername(value: String): Option[UserNameT] =
-    if (value.nonEmpty) value.coerce[UserNameT].some else None
+    if (value.nonEmpty) UserNameT(value).some else None
 
   def mkName(value: String): Option[NameT] =
-    if (value.nonEmpty) value.coerce[NameT].some else None
+    if (value.nonEmpty) NameT(value).some else None
 
   def mkEmail(value: String): Option[EmailT] =
-    if (value.contains("@")) value.coerce[EmailT].some else None
+    if (value.contains("@")) EmailT(value).some else None
 
   case object EmptyError extends NoStackTrace
   case object InvalidEmail extends NoStackTrace
