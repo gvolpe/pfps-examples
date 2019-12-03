@@ -53,4 +53,19 @@ object StateDemo extends IOApp {
       // Sharing state only via the TF algebra
       c.incr >> incrByTen(c) >> c.get.flatMap(putStrLn)
     }
+
+  // ------------- Creation of mutable state -------------
+
+  val makeRef = Ref.of[IO, Int](0)
+
+  val program =
+    for {
+      r <- makeRef
+      _ <- r.update(_ + 10)
+      r <- makeRef
+      _ <- r.update(_ + 20)
+      n <- r.get
+      _ <- putStrLn(n)
+    } yield ()
+
 }
