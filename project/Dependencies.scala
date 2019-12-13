@@ -5,7 +5,9 @@ object Dependencies {
   object Versions {
     val cats         = "2.0.0"
     val catsEffect   = "2.0.0"
+    val catsMeowMtl  = "0.4.0"
     val console4cats = "0.8.0"
+    val derevo       = "0.10.5"
     val fs2          = "2.1.0"
     val log4cats     = "1.0.0"
     val newtype      = "0.4.3"
@@ -17,10 +19,12 @@ object Dependencies {
   }
 
   object Libraries {
-    lazy val cats         = "org.typelevel"  %% "cats-core"    % Versions.cats
-    lazy val catsEffect   = "org.typelevel"  %% "cats-effect"  % Versions.catsEffect
-    lazy val console4cats = "dev.profunktor" %% "console4cats" % Versions.console4cats
-    lazy val fs2          = "co.fs2"         %% "fs2-core"     % Versions.fs2
+    lazy val cats         = "org.typelevel"  %% "cats-core"     % Versions.cats
+    lazy val catsEffect   = "org.typelevel"  %% "cats-effect"   % Versions.catsEffect
+    lazy val catsMeowMtl  = "com.olegpy"     %% "meow-mtl-core" % Versions.catsMeowMtl
+    lazy val console4cats = "dev.profunktor" %% "console4cats"  % Versions.console4cats
+    lazy val derevo       = "org.manatki"    %% "derevo-cats"   % Versions.derevo
+    lazy val fs2          = "co.fs2"         %% "fs2-core"      % Versions.fs2
 
     lazy val refinedCore = "eu.timepit" %% "refined"      % Versions.refined
     lazy val refinedCats = "eu.timepit" %% "refined-cats" % Versions.refined

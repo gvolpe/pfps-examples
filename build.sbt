@@ -15,7 +15,9 @@ lazy val root = (project in file("."))
       compilerPlugin(Libraries.betterMonadicFor),
       Libraries.cats,
       Libraries.catsEffect,
+      Libraries.catsMeowMtl,
       Libraries.console4cats,
+      Libraries.derevo,
       Libraries.fs2,
       Libraries.newtype,
       Libraries.refinedCore
