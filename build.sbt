@@ -17,7 +17,8 @@ lazy val root = (project in file("."))
       Libraries.catsEffect,
       Libraries.catsMeowMtl,
       Libraries.console4cats,
-      Libraries.derevo,
+      Libraries.derevoCats,
+      Libraries.derevoTagless,
       Libraries.fs2,
       Libraries.newtype,
       Libraries.refinedCore
