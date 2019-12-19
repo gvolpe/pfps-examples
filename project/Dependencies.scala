@@ -19,11 +19,13 @@ object Dependencies {
   }
 
   object Libraries {
-    lazy val cats         = "org.typelevel"  %% "cats-core"     % Versions.cats
-    lazy val catsEffect   = "org.typelevel"  %% "cats-effect"   % Versions.catsEffect
-    lazy val catsMeowMtl  = "com.olegpy"     %% "meow-mtl-core" % Versions.catsMeowMtl
-    lazy val console4cats = "dev.profunktor" %% "console4cats"  % Versions.console4cats
-    lazy val fs2          = "co.fs2"         %% "fs2-core"      % Versions.fs2
+    lazy val cats         = "org.typelevel"  %% "cats-core"    % Versions.cats
+    lazy val catsEffect   = "org.typelevel"  %% "cats-effect"  % Versions.catsEffect
+    lazy val console4cats = "dev.profunktor" %% "console4cats" % Versions.console4cats
+    lazy val fs2          = "co.fs2"         %% "fs2-core"     % Versions.fs2
+
+    lazy val catsMeowMtlCore    = "com.olegpy" %% "meow-mtl-core"    % Versions.catsMeowMtl
+    lazy val catsMeowMtlEffects = "com.olegpy" %% "meow-mtl-effects" % Versions.catsMeowMtl
 
     lazy val derevoCats    = "org.manatki" %% "derevo-cats"         % Versions.derevo
     lazy val derevoTagless = "org.manatki" %% "derevo-cats-tagless" % Versions.derevo
