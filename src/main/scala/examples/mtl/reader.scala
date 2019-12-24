@@ -1,10 +1,12 @@
 package examples.mtl
 
 import cats._
+import cats.data.Kleisli
 import cats.effect._
 import cats.effect.Console.implicits._
 import cats.implicits._
 import cats.mtl._
+import cats.mtl.instances.all._
 import com.olegpy.meow.hierarchy._
 import org.manatki.derevo.catsInstances.show
 import org.manatki.derevo.derive
@@ -37,7 +39,8 @@ object MtlClassyDemo extends IOApp {
     }
 
   def run(args: List[String]): IO[ExitCode] =
-    program[IO].as(ExitCode.Success)
+    program[Kleisli[IO, Ctx, *]].run(ctx) >>
+      program[IO].as(ExitCode.Success)
 
 }
 

@@ -14,8 +14,6 @@ import org.manatki.derevo.derive
 
 object StateDemo extends IOApp {
 
-  implicit val stConsole = SyncConsole.stdio[StateT[IO, FooState, *]]
-
   @derive(show)
   case class FooState(value: String) extends AnyVal
 
@@ -31,7 +29,7 @@ object StateDemo extends IOApp {
     } yield ()
 
   val p1: IO[Unit] =
-    program[StateT[IO, FooState, *]].run(FooState("mt")).void
+    program[StateT[IO, FooState, *]].run(FooState("bar")).void
 
   val p2: IO[Unit] =
     Ref.of[IO, FooState](FooState("bar")).flatMap { ref =>
@@ -41,6 +39,6 @@ object StateDemo extends IOApp {
     }
 
   def run(args: List[String]): IO[ExitCode] =
-    p2.as(ExitCode.Success)
+    (p1 >> p2).as(ExitCode.Success)
 
 }
