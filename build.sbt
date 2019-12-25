@@ -11,11 +11,15 @@ lazy val root = (project in file("."))
     scalacOptions += "-Ymacro-annotations",
     scalafmtOnCompile := true,
     libraryDependencies ++= Seq(
-      compilerPlugin(Libraries.kindProjector),
-      compilerPlugin(Libraries.betterMonadicFor),
+      CompilerPlugins.kindProjector,
+      CompilerPlugins.betterMonadicFor,
       Libraries.cats,
       Libraries.catsEffect,
+      Libraries.catsMeowMtlCore,
+      Libraries.catsMeowMtlEffects,
       Libraries.console4cats,
+      Libraries.derevoCats,
+      Libraries.derevoTagless,
       Libraries.fs2,
       Libraries.newtype,
       Libraries.refinedCore

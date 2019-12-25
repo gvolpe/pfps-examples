@@ -5,7 +5,9 @@ object Dependencies {
   object Versions {
     val cats         = "2.0.0"
     val catsEffect   = "2.0.0"
+    val catsMeowMtl  = "0.4.0"
     val console4cats = "0.8.1"
+    val derevo       = "0.10.5"
     val fs2          = "2.1.0"
     val log4cats     = "1.0.0"
     val newtype      = "0.4.3"
@@ -17,23 +19,30 @@ object Dependencies {
   }
 
   object Libraries {
-    lazy val cats         = "org.typelevel"  %% "cats-core"    % Versions.cats
-    lazy val catsEffect   = "org.typelevel"  %% "cats-effect"  % Versions.catsEffect
-    lazy val console4cats = "dev.profunktor" %% "console4cats" % Versions.console4cats
-    lazy val fs2          = "co.fs2"         %% "fs2-core"     % Versions.fs2
+    val cats         = "org.typelevel"  %% "cats-core"    % Versions.cats
+    val catsEffect   = "org.typelevel"  %% "cats-effect"  % Versions.catsEffect
+    val console4cats = "dev.profunktor" %% "console4cats" % Versions.console4cats
+    val fs2          = "co.fs2"         %% "fs2-core"     % Versions.fs2
 
-    lazy val refinedCore = "eu.timepit" %% "refined"      % Versions.refined
-    lazy val refinedCats = "eu.timepit" %% "refined-cats" % Versions.refined
+    val catsMeowMtlCore    = "com.olegpy" %% "meow-mtl-core"    % Versions.catsMeowMtl
+    val catsMeowMtlEffects = "com.olegpy" %% "meow-mtl-effects" % Versions.catsMeowMtl
 
-    lazy val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % Versions.log4cats
-    lazy val newtype  = "io.estatico"       %% "newtype"        % Versions.newtype
+    val derevoCats    = "org.manatki" %% "derevo-cats"         % Versions.derevo
+    val derevoTagless = "org.manatki" %% "derevo-cats-tagless" % Versions.derevo
 
-    // Compiler plugins
-    lazy val betterMonadicFor = "com.olegpy"    %% "better-monadic-for" % Versions.betterMonadicFor
-    lazy val kindProjector    = "org.typelevel" %% "kind-projector"     % Versions.kindProjector
+    val refinedCore = "eu.timepit" %% "refined"      % Versions.refined
+    val refinedCats = "eu.timepit" %% "refined-cats" % Versions.refined
+
+    val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % Versions.log4cats
+    val newtype  = "io.estatico"       %% "newtype"        % Versions.newtype
 
     // Runtime
-    lazy val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
+    val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
+  }
+
+  object CompilerPlugins {
+    val betterMonadicFor = compilerPlugin("com.olegpy"    %% "better-monadic-for" % Versions.betterMonadicFor)
+    val kindProjector    = compilerPlugin("org.typelevel" %% "kind-projector"     % Versions.kindProjector)
   }
 
 }

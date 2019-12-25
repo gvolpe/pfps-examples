@@ -1,8 +1,8 @@
 package examples.patterns
 
 import cats.effect._
-import cats.implicits._
 import cats.effect.Console.io._
+import cats.implicits._
 
 object DoNotUseSeq extends IOApp {
 

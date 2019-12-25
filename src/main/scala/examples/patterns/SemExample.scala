@@ -2,8 +2,8 @@ package examples.patterns
 
 import cats.effect._
 import cats.effect.concurrent.Semaphore
-import cats.implicits._
 import cats.effect.Console.io._
+import cats.implicits._
 import scala.concurrent.duration._
 
 object SemExample extends IOApp {
