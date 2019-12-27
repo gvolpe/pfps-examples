@@ -4,9 +4,11 @@ import cats._
 import cats.data.Kleisli
 import cats.effect._
 import cats.effect.Console.implicits._
+import cats.effect.concurrent.Ref
 import cats.implicits._
 import cats.mtl._
 import cats.mtl.instances.all._
+import com.olegpy.meow.effects._
 import com.olegpy.meow.hierarchy._
 import org.manatki.derevo.catsInstances.show
 import org.manatki.derevo.derive
@@ -31,16 +33,26 @@ object MtlClassyDemo extends IOApp {
 
   val ctx = Ctx(Foo("foo"), Bar(123))
 
-  implicit val askIO: ApplicativeAsk[IO, Ctx] =
-    new DefaultApplicativeAsk[IO, Ctx] {
-      override val applicative: Applicative[IO]  = implicitly
-      override def ask: IO[Ctx]                  = IO.pure(ctx)
-      override def reader[A](f: Ctx => A): IO[A] = ask.map(f)
+  val effectful: IO[Unit] =
+    Ref.of[IO, Ctx](ctx).flatMap { ref =>
+      ref.runAsk { implicit ioCtxAsk =>
+        program[IO]
+      }
     }
+
+  val manual: IO[Unit] = {
+    implicit val askIO: ApplicativeAsk[IO, Ctx] =
+      new DefaultApplicativeAsk[IO, Ctx] {
+        override val applicative: Applicative[IO]  = implicitly
+        override def ask: IO[Ctx]                  = IO.pure(ctx)
+        override def reader[A](f: Ctx => A): IO[A] = ask.map(f)
+      }
+    program[IO]
+  }
 
   def run(args: List[String]): IO[ExitCode] =
     program[Kleisli[IO, Ctx, *]].run(ctx) >>
-      program[IO].as(ExitCode.Success)
+        effectful >> manual.as(ExitCode.Success)
 
 }
 
