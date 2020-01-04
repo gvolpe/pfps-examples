@@ -20,13 +20,13 @@ object MtlClassyDemo extends IOApp {
     ApplicativeAsk[F, String].ask.map(_ ++ " foo")
 
   def p1[F[_]: Console: HasCtx: Monad]: F[Unit] =
-    ask[F, Ctx].flatMap(ctx => Console[F].putStrLn(ctx))
+    F.ask.flatMap(ctx => Console[F].putStrLn(ctx))
 
   def p2[F[_]: Console: HasFoo: Monad]: F[Unit] =
-    ask[F, Foo].flatMap(foo => Console[F].putStrLn(foo))
+    F.ask.flatMap(foo => Console[F].putStrLn(foo))
 
   def p3[F[_]: Console: HasBar: Monad]: F[Unit] =
-    ask[F, Bar].flatMap(bar => Console[F].putStrLn(bar))
+    F.ask.flatMap(bar => Console[F].putStrLn(bar))
 
   def program[F[_]: Console: HasCtx: Monad]: F[Unit] =
     p2[F] >> p3[F] >> Console[F].putStrLn("Done")
@@ -57,8 +57,6 @@ object MtlClassyDemo extends IOApp {
 }
 
 object reader {
-  def ask[F[_], A](implicit ev: ApplicativeAsk[F, A]): F[A] = ev.ask
-
   @derive(show)
   final case class Foo(value: String)
 

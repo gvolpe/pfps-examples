@@ -19,17 +19,17 @@ object StateDemo extends IOApp {
 
   import com.olegpy.meow.prelude._ // Use Monad instance from MonadState
 
-  def inspection[F[_]](implicit C: Console[F], M: MonadState[F, FooState]): F[Unit] =
-    M.inspect(st => s"prefix:$st").flatMap(C.putStrLn(_)) >>
-      M.get.flatMap(C.putStrLn(_))
+  def inspection[F[_]: Console: MonadState[*[_], FooState]]: F[Unit] =
+    F.inspect(st => s"prefix:$st").flatMap(F.putStrLn(_)) >>
+      F.get.flatMap(F.putStrLn(_))
 
-  def program[F[_]](implicit C: Console[F], M: MonadState[F, FooState]): F[Unit] =
+  def program[F[_]: Console: MonadState[*[_], FooState]]: F[Unit] =
     for {
-      current <- M.get
-      _ <- C.putStrLn(current)
-      _ <- M.set(FooState("foo"))
-      updated <- M.get
-      _ <- C.putStrLn(updated)
+      current <- F.get
+      _ <- F.putStrLn(current)
+      _ <- F.set(FooState("foo"))
+      updated <- F.get
+      _ <- F.putStrLn(updated)
     } yield ()
 
   val p1: IO[Unit] =

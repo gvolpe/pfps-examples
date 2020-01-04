@@ -13,12 +13,10 @@ trait Random[F[_]] {
 }
 
 object Random {
-  def apply[F[_]](implicit ev: Random[F]): Random[F] = ev
-
   implicit def syncInstance[F[_]: Sync]: Random[F] =
     new Random[F] {
       def bool: F[Boolean] = int.map(_ % 2 == 0)
-      def int: F[Int]      = Sync[F].delay(scala.util.Random.nextInt(100))
+      def int: F[Int]      = F.delay(scala.util.Random.nextInt(100))
     }
 }
 
@@ -36,13 +34,13 @@ class LiveCategories[
 ] extends Categories[F] {
 
   def findAll: F[List[Category]] =
-    Random[F].bool.ifM(
+    F.bool.ifM(
       List.empty[Category].pure[F],
       RandomError.raiseError[F, List[Category]]
     )
 
   def maybeFindAll: F[Either[BusinessError, List[Category]]] =
-    Random[F].bool.map {
+    F.bool.map {
       case true  => List.empty[Category].asRight[BusinessError]
       case false => RandomError.asLeft[List[Category]]
     }
