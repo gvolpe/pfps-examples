@@ -19,17 +19,17 @@ object MtlClassyDemo extends IOApp {
   def simple[F[_]: ApplicativeAsk[*[_], String]: Functor]: F[String] =
     ApplicativeAsk[F, String].ask.map(_ ++ " foo")
 
-  def p1[F[_]: Console: HasCtx: Monad]: F[Unit] =
-    F.ask.flatMap(ctx => Console[F].putStrLn(ctx))
+  def p1[F[_]: Console: FlatMap: HasCtx]: F[Unit] =
+    F.ask.flatMap(ctx => F.putStrLn(ctx))
 
-  def p2[F[_]: Console: HasFoo: Monad]: F[Unit] =
-    F.ask.flatMap(foo => Console[F].putStrLn(foo))
+  def p2[F[_]: Console: FlatMap: HasFoo]: F[Unit] =
+    F.ask.flatMap(foo => F.putStrLn(foo))
 
-  def p3[F[_]: Console: HasBar: Monad]: F[Unit] =
-    F.ask.flatMap(bar => Console[F].putStrLn(bar))
+  def p3[F[_]: Console: FlatMap: HasBar]: F[Unit] =
+    F.ask.flatMap(bar => F.putStrLn(bar))
 
-  def program[F[_]: Console: HasCtx: Monad]: F[Unit] =
-    p2[F] >> p3[F] >> Console[F].putStrLn("Done")
+  def program[F[_]: Console: FlatMap: HasCtx]: F[Unit] =
+    p2[F] >> p3[F] >> F.putStrLn("Done")
 
   val ctx = Ctx(Foo("foo"), Bar(123))
 
