@@ -10,12 +10,13 @@ object Dependencies {
     val derevo       = "0.10.5"
     val fs2          = "2.1.0"
     val log4cats     = "1.0.0"
+    val logback      = "1.2.1"
     val newtype      = "0.4.3"
     val refined      = "0.9.10"
 
     val betterMonadicFor = "0.3.1"
+    val contextApplied   = "0.1.2"
     val kindProjector    = "0.10.3"
-    val logback          = "1.2.1"
   }
 
   object Libraries {
@@ -41,8 +42,9 @@ object Dependencies {
   }
 
   object CompilerPlugins {
-    val betterMonadicFor = compilerPlugin("com.olegpy"    %% "better-monadic-for" % Versions.betterMonadicFor)
-    val kindProjector    = compilerPlugin("org.typelevel" %% "kind-projector"     % Versions.kindProjector)
+    val betterMonadicFor = compilerPlugin("com.olegpy"     %% "better-monadic-for" % Versions.betterMonadicFor)
+    val contextApplied   = compilerPlugin("org.augustjune" %% "context-applied"    % Versions.contextApplied)
+    val kindProjector    = compilerPlugin("org.typelevel"  %% "kind-projector"     % Versions.kindProjector)
   }
 
 }

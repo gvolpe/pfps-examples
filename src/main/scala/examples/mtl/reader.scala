@@ -52,7 +52,7 @@ object MtlClassyDemo extends IOApp {
 
   def run(args: List[String]): IO[ExitCode] =
     program[Kleisli[IO, Ctx, *]].run(ctx) >>
-        effectful >> manual.as(ExitCode.Success)
+      effectful >> manual.as(ExitCode.Success)
 
 }
 

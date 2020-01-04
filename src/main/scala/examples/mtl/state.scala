@@ -21,7 +21,7 @@ object StateDemo extends IOApp {
 
   def inspection[F[_]](implicit C: Console[F], M: MonadState[F, FooState]): F[Unit] =
     M.inspect(st => s"prefix:$st").flatMap(C.putStrLn(_)) >>
-        M.get.flatMap(C.putStrLn(_))
+      M.get.flatMap(C.putStrLn(_))
 
   def program[F[_]](implicit C: Console[F], M: MonadState[F, FooState]): F[Unit] =
     for {
