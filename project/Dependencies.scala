@@ -11,6 +11,7 @@ object Dependencies {
     val fs2          = "2.1.0"
     val log4cats     = "1.0.0"
     val logback      = "1.2.1"
+    val monocle      = "2.0.1"
     val newtype      = "0.4.3"
     val refined      = "0.9.10"
 
@@ -36,6 +37,8 @@ object Dependencies {
 
     val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % Versions.log4cats
     val newtype  = "io.estatico"       %% "newtype"        % Versions.newtype
+
+    val monocleCore = "com.github.julien-truffaut" %% "monocle-core" % Versions.monocle
 
     // Runtime
     val logback = "ch.qos.logback" % "logback-classic" % Versions.logback

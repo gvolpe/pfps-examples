@@ -22,6 +22,7 @@ lazy val root = (project in file("."))
       Libraries.derevoCats,
       Libraries.derevoTagless,
       Libraries.fs2,
+      Libraries.monocleCore,
       Libraries.newtype,
       Libraries.refinedCore
     )
