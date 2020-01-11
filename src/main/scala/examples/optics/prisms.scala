@@ -18,4 +18,14 @@ object prisms extends App {
   val c = vPrism.getOption(Car) // Some(Car)
 
   println("Prisms example")
+
+  val ps: Prism[Option[String], String] =
+    Prism.partial[Option[String], String] { case Some(v) => v }(Option.apply)
+
+  val pi: Prism[String, Int] =
+    Prism.partial[String, Int] { case v if v.toIntOption.isDefined => v.toInt }(_.toString)
+
+  val pp: Prism[Option[String], Int] =
+    ps.composePrism(pi)
+
 }
