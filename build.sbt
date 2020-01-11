@@ -8,12 +8,13 @@ ThisBuild / organizationName := "ProfunKtor"
 lazy val root = (project in file("."))
   .settings(
     name := "examples",
-    scalacOptions += "-Ymacro-annotations",
+    scalacOptions ++= Seq("-Ymacro-annotations", "-Ywarn-unused:imports"),
     scalafmtOnCompile := true,
     libraryDependencies ++= Seq(
       CompilerPlugins.betterMonadicFor,
       CompilerPlugins.contextApplied,
       CompilerPlugins.kindProjector,
+      compilerPlugin(scalafixSemanticdb),
       Libraries.cats,
       Libraries.catsEffect,
       Libraries.catsMeowMtlCore,
