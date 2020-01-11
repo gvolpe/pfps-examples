@@ -23,7 +23,7 @@ object StateDemo extends IOApp {
     Ref.of[IO, Int](0).flatMap { ref =>
       incrByOne(ref) >> incrByTwo(ref) >>
         // We can access the Ref and alter its state which may be undesirable
-        ref.get.flatMap(n => if (n % 3 == 0) ref.set(100) else IO.unit) >>
+        ref.get.flatMap(n => if (n % 3 === 0) ref.set(100) else IO.unit) >>
         ref.get.flatMap(putStrLn)
     }
 

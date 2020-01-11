@@ -15,7 +15,7 @@ trait Random[F[_]] {
 object Random {
   implicit def syncInstance[F[_]: Sync]: Random[F] =
     new Random[F] {
-      def bool: F[Boolean] = int.map(_ % 2 == 0)
+      def bool: F[Boolean] = int.map(_ % 2 === 0)
       def int: F[Int]      = F.delay(scala.util.Random.nextInt(100))
     }
 }
