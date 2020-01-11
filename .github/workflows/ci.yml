@@ -14,4 +14,4 @@ jobs:
     - uses: actions/checkout@v1
     - uses: olafurpg/setup-scala@v5
     - name: Tests
-      run: sbt -J-Xms4G -J-Xmx4G test
+      run: sbt -J-Xms4G -J-Xmx4G test scalafix
