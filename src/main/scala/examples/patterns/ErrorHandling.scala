@@ -51,7 +51,7 @@ class Program[F[_]: Functor](
     categories: Categories[F]
 ) {
 
-  def finfAll: F[List[Category]] =
+  def findAll: F[List[Category]] =
     categories.maybeFindAll.map {
       case Right(c)          => c
       case Left(RandomError) => List.empty[Category]
