@@ -71,7 +71,19 @@ object interruption extends IOApp {
       .interruptAfter(10.seconds)
       .onComplete(Stream.eval(putStrLn("pong")))
 
+  val s1 =
+    Stream.sleep[IO](5.seconds) >> Stream.eval(putStrLn("done s1"))
+
+  val s2 =
+    Stream.random[IO].evalMap(putStrLn(_)).metered(1.second).interruptAfter(10.seconds)
+
+  val p4 =
+    Stream(s1, s2).parJoin(2)
+
+  val p5 =
+    Stream(s1, s2.concurrently(p1)).parJoin(2)
+
   def run(args: List[String]): IO[ExitCode] =
-    p3.compile.drain.as(ExitCode.Success)
+    p5.compile.drain.as(ExitCode.Success)
 
 }
