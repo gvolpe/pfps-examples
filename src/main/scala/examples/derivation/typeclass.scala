@@ -11,17 +11,17 @@ import org.manatki.derevo.tagless.{ applyK, flatMap }
 
 object typeclass {
 
-  // --- Single-kinded type `*`
+  // --- Concrete type `*`
   @derive(eqv, order, semigroup, show)
-  final case class SingleKind(value: String)
+  final case class Concrete(value: String)
 
-  Eq[SingleKind]
-  Order[SingleKind]
-  Semigroup[SingleKind]
-  Show[SingleKind]
+  Eq[Concrete]
+  Order[Concrete]
+  Semigroup[Concrete]
+  Show[Concrete]
 
-  val a = SingleKind("a")
-  val b = SingleKind("b")
+  val a = Concrete("a")
+  val b = Concrete("b")
 
   a === b // from Eq
   a.min(b) // from Order

@@ -1,21 +1,23 @@
 package examples.patterns
 
-import cats.effect._
-import cats.effect.Console.io._
-import cats.implicits._
-
-object DoNotUseSeq extends IOApp {
+object DoNotUseSeq extends App {
 
   val inf: LazyList[Int] = 1 #:: inf.map(_ + 1)
   //val inf: Stream[Int] = 1 #:: inf.map(_ + 1)
-  def api: IO[Seq[Int]] = IO.pure(inf)
 
-  def usage: IO[Unit] =
-    api
-      .map(_.toList.foldLeft(0)((acc, n) => acc + n))
-      .flatMap(putStrLn(_))
+  inf.toList.foreach(println(_))
 
-  def run(args: List[String]): IO[ExitCode] =
-    usage.as(ExitCode.Success)
+  // it won't be long until you get an OOM
+
+  /*
+
+    [error] (run-main-0) java.lang.OutOfMemoryError: GC overhead limit exceeded
+    [error] java.lang.OutOfMemoryError: GC overhead limit exceeded
+    [error]         at java.lang.Integer.valueOf(Integer.java:832)
+    [error]         at scala.runtime.java8.JFunction1$mcII$sp.apply(JFunction1$mcII$sp.scala:17)
+    [error]         at scala.collection.immutable.LazyList.$anonfun$mapImpl$1(LazyList.scala:484)
+    [error]         at scala.collection.immutable.LazyList$$Lambda$5728/710638503.apply(Unknown Source)
+
+   */
 
 }
