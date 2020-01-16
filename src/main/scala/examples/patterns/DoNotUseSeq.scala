@@ -5,9 +5,9 @@ object DoNotUseSeq extends App {
   val inf: LazyList[Int] = 1 #:: inf.map(_ + 1)
   //val inf: Stream[Int] = 1 #:: inf.map(_ + 1)
 
-  inf.toList.foreach(println(_))
+  println(inf.toList)
 
-  // it won't be long until you get an OOM
+  // it won't be long until you get an OOM error
 
   /*
 
@@ -18,6 +18,6 @@ object DoNotUseSeq extends App {
     [error]         at scala.collection.immutable.LazyList.$anonfun$mapImpl$1(LazyList.scala:484)
     [error]         at scala.collection.immutable.LazyList$$Lambda$5728/710638503.apply(Unknown Source)
 
-   */
+ */
 
 }
