@@ -39,6 +39,7 @@ object interruption extends IOApp {
           case _ => IO.unit
         }
         .interruptWhen(promise)
+        .onComplete(Stream.eval(putStrLn("interrupted!")))
     }
 
   // signalling pause and interruption
@@ -84,6 +85,6 @@ object interruption extends IOApp {
     Stream(s1, s2.concurrently(p1)).parJoin(2)
 
   def run(args: List[String]): IO[ExitCode] =
-    p5.compile.drain.as(ExitCode.Success)
+    p2.compile.drain.as(ExitCode.Success)
 
 }
