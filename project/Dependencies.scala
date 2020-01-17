@@ -17,7 +17,7 @@ object Dependencies {
 
     val betterMonadicFor = "0.3.1"
     val contextApplied   = "0.1.2"
-    val kindProjector    = "0.10.3"
+    val kindProjector    = "0.11.0"
   }
 
   object Libraries {
@@ -47,7 +47,7 @@ object Dependencies {
   object CompilerPlugins {
     val betterMonadicFor = compilerPlugin("com.olegpy"     %% "better-monadic-for" % Versions.betterMonadicFor)
     val contextApplied   = compilerPlugin("org.augustjune" %% "context-applied"    % Versions.contextApplied)
-    val kindProjector    = compilerPlugin("org.typelevel"  %% "kind-projector"     % Versions.kindProjector)
+    val kindProjector    = compilerPlugin("org.typelevel"  %% "kind-projector"     % Versions.kindProjector cross CrossVersion.full)
   }
 
 }
