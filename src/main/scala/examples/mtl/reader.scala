@@ -10,8 +10,8 @@ import cats.mtl._
 import cats.mtl.instances.all._
 import com.olegpy.meow.effects._
 import com.olegpy.meow.hierarchy._
-import org.manatki.derevo.catsInstances.show
-import org.manatki.derevo.derive
+import derevo.derive
+import derevo.cats.show
 
 object MtlClassyDemo extends IOApp {
   import reader._

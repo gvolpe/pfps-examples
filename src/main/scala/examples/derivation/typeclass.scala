@@ -6,13 +6,14 @@ import cats.data.Tuple2K
 import cats.implicits._
 import cats.tagless._
 import org.manatki.derevo.catsInstances.{ eq => eqv, _ }
-import org.manatki.derevo.derive
-import org.manatki.derevo.tagless.{ applyK, flatMap }
+import derevo.derive
+import derevo.cats.{ eq, order, semigroup, show }
+import derevo.tagless.applyK
 
 object typeclass {
 
   // --- Concrete type `*`
-  @derive(eqv, order, semigroup, show)
+  @derive(eq, order, semigroup, show)
   final case class Concrete(value: String)
 
   Eq[Concrete]
