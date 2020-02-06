@@ -38,7 +38,8 @@ object Dependencies {
     val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % Versions.log4cats
     val newtype  = "io.estatico"       %% "newtype"        % Versions.newtype
 
-    val monocleCore = "com.github.julien-truffaut" %% "monocle-core" % Versions.monocle
+    val monocleCore  = "com.github.julien-truffaut" %% "monocle-core"  % Versions.monocle
+    val monocleMacro = "com.github.julien-truffaut" %% "monocle-macro" % Versions.monocle
 
     // Runtime
     val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
@@ -47,7 +48,9 @@ object Dependencies {
   object CompilerPlugins {
     val betterMonadicFor = compilerPlugin("com.olegpy"     %% "better-monadic-for" % Versions.betterMonadicFor)
     val contextApplied   = compilerPlugin("org.augustjune" %% "context-applied"    % Versions.contextApplied)
-    val kindProjector    = compilerPlugin("org.typelevel"  %% "kind-projector"     % Versions.kindProjector cross CrossVersion.full)
+    val kindProjector = compilerPlugin(
+      "org.typelevel" %% "kind-projector" % Versions.kindProjector cross CrossVersion.full
+    )
   }
 
 }
