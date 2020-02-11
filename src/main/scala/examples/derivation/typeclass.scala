@@ -5,9 +5,9 @@ import cats.arrow.FunctionK
 import cats.data.Tuple2K
 import cats.implicits._
 import cats.tagless._
-import org.manatki.derevo.catsInstances.{ eq => eqv, _ }
-import org.manatki.derevo.derive
-import org.manatki.derevo.tagless.{ applyK, flatMap }
+import derevo.cats.{ eq => eqv, _ }
+import derevo.derive
+import derevo.tagless.{ applyK, flatMap }
 
 object typeclass {
 
