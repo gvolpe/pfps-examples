@@ -1,11 +1,13 @@
 package meetup
 
+import cats.data.ValidatedNel
 import cats.effect._
 import cats.implicits._
 import io.estatico.newtype.macros._
+import eu.timepit.refined._
 import eu.timepit.refined.api._
 import eu.timepit.refined.auto._
-import eu.timepit.refined.collection.Contains
+import eu.timepit.refined.collection.{ Contains, NonEmpty }
 import eu.timepit.refined.types.string.NonEmptyString
 import scala.util.control.NoStackTrace
 import shapeless._
@@ -94,12 +96,12 @@ object TypesDemo extends IOApp {
   case object InvalidEmail extends NoStackTrace
 
   val p4: IO[Unit] =
-    for {
-      u <- mkUsername("gvolpe").liftTo[IO](EmptyError)
-      n <- mkName("George").liftTo[IO](EmptyError)
-      e <- mkEmail("123").liftTo[IO](InvalidEmail)
-      _ <- putStrLn(showNameT(u, n, e))
-    } yield ()
+    (
+      mkUsername("gvolpe").liftTo[IO](EmptyError),
+      mkName("George").liftTo[IO](EmptyError),
+      mkEmail("123").liftTo[IO](InvalidEmail)
+    ).parMapN(showNameT)
+      .flatMap(putStrLn)
 
   // ----------------- Refinement Types -------------------
 
@@ -118,8 +120,8 @@ object TypesDemo extends IOApp {
 
   def showNameTR(username: UserName, name: Name, email: Email): String =
     s"""
-      Hi ${name.value.value}! Your username is ${username.value.value}
-      and your email is ${email.value.value}.
+      Hi ${name.value}! Your username is ${username.value}
+      and your email is ${email.value}.
      """
 
   val p6: IO[Unit] =
@@ -131,8 +133,52 @@ object TypesDemo extends IOApp {
       )
     )
 
+  def c6(u: String, n: String, e: String): IO[Unit] = {
+    import NewtypeRefinedOps._
+    val result =
+      (
+        validate[UserName, NonEmpty](u),
+        validate[Name, NonEmpty](n),
+        validate[Email, Contains['@']](e)
+      ).mapN(showNameTR)
+    putStrLn(result)
+  }
+
+  //--------------- Auto unwrapping ----------------
+
+  val p7: IO[Unit] =
+    putStrLn(">>>>>>>> Unwrapping Newtype <<<<<<<<") >>
+        putStrLn(AutoUnwrapping.raw)
+
+  //--------------- Refined + Validated ----------------
+
+  case class MyType(a: NonEmptyString, b: NonEmptyString)
+
+  def p8(a: String, b: String): IO[Unit] = {
+    val result =
+      for {
+        x <- refineV[NonEmpty](a)
+        y <- refineV[NonEmpty](b)
+      } yield MyType(x, y)
+    putStrLn(result)
+  }
+
+  def p9(a: String, b: String): IO[Unit] = {
+    val result =
+      (refineV[NonEmpty](a), refineV[NonEmpty](b))
+        .parMapN(MyType.apply) // Validated conversion via Parallel
+    putStrLn(result)
+  }
+
+  def p10(a: String, b: String): IO[Unit] = {
+    val result =
+      (refineV[NonEmpty](a).toValidatedNel, refineV[NonEmpty](b).toValidatedNel)
+        .mapN(MyType.apply)
+    putStrLn(result)
+  }
+
   def run(args: List[String]): IO[ExitCode] =
-    p6.as(ExitCode.Success)
+    c6("", "", "foo").as(ExitCode.Success)
 }
 
 object types {
@@ -174,4 +220,41 @@ object types {
   @newtype case class UserName(value: NonEmptyString)
   @newtype case class Name(value: NonEmptyString)
   @newtype case class Email(value: String Refined Contains['@'])
+
+}
+
+object NewtypeRefinedOps {
+  import io.estatico.newtype.Coercible
+  import io.estatico.newtype.ops._
+
+  final class NewtypeRefinedPartiallyApplied[A, P] {
+    def apply[T](raw: T)(
+        implicit v: Validate[T, P],
+        c: Coercible[Refined[T, P], A]
+    ): ValidatedNel[String, A] =
+      refineV[P](raw).toValidatedNel.map(_.coerce[A])
+  }
+
+  def validate[A, P]: NewtypeRefinedPartiallyApplied[A, P] = new NewtypeRefinedPartiallyApplied[A, P]
+
+}
+
+object AutoUnwrapping {
+  import io.estatico.newtype.Coercible
+  import io.estatico.newtype.ops._
+  import types._
+  //implicit def autoUnwrap[F[_, _], T, P](tp: F[T, P])(implicit rt: RefType[F]): T =
+
+  // Doesn't work yet -_-
+  implicit def autoUnwrapNewtypeOfRefined[F[_, _]: RefType, T, P, A: Coercible[F[T, P], *]](a: A): T =
+    autoUnwrap[F, T, P](a.repr.asInstanceOf[F[T, P]])
+
+  //implicit def autoUnwrapNewtype[A: Coercible[B, *], B](a: A): B =
+  //  a.repr
+
+  val u1 = UserName("gvolpe")
+  val u2 = UserNameT("jconway")
+
+  val raw: NonEmptyString = u1.value
+
 }
