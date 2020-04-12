@@ -1,6 +1,6 @@
 package meetup
 
-import cats.data.ValidatedNel
+import cats.data.EitherNel
 import cats.effect._
 import cats.implicits._
 import io.estatico.newtype.macros._
@@ -140,7 +140,7 @@ object TypesDemo extends IOApp {
         validate[UserName, NonEmpty](u),
         validate[Name, NonEmpty](n),
         validate[Email, Contains['@']](e)
-      ).mapN(showNameTR)
+      ).parMapN(showNameTR)
     putStrLn(result)
   }
 
@@ -165,7 +165,7 @@ object TypesDemo extends IOApp {
 
   def p9(a: String, b: String): IO[Unit] = {
     val result =
-      (refineV[NonEmpty](a), refineV[NonEmpty](b))
+      (refineV[NonEmpty](a).toEitherNel, refineV[NonEmpty](b).toEitherNel)
         .parMapN(MyType.apply) // Validated conversion via Parallel
     putStrLn(result)
   }
@@ -178,7 +178,7 @@ object TypesDemo extends IOApp {
   }
 
   def run(args: List[String]): IO[ExitCode] =
-    c6("", "", "foo").as(ExitCode.Success)
+    c6("", "", "#").as(ExitCode.Success)
 }
 
 object types {
@@ -231,8 +231,8 @@ object NewtypeRefinedOps {
     def apply[T](raw: T)(
         implicit v: Validate[T, P],
         c: Coercible[Refined[T, P], A]
-    ): ValidatedNel[String, A] =
-      refineV[P](raw).toValidatedNel.map(_.coerce[A])
+    ): EitherNel[String, A] =
+      refineV[P](raw).toEitherNel.map(_.coerce[A])
   }
 
   def validate[A, P]: NewtypeRefinedPartiallyApplied[A, P] = new NewtypeRefinedPartiallyApplied[A, P]
