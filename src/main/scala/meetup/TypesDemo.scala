@@ -8,6 +8,7 @@ import eu.timepit.refined._
 import eu.timepit.refined.api._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.{ Contains, NonEmpty }
+import eu.timepit.refined.numeric.Greater
 import eu.timepit.refined.types.string.NonEmptyString
 import scala.util.control.NoStackTrace
 import shapeless._
@@ -152,33 +153,33 @@ object TypesDemo extends IOApp {
 
   //--------------- Refined + Validated ----------------
 
-  case class MyType(a: NonEmptyString, b: NonEmptyString)
+  case class MyType(a: NonEmptyString, b: Int Refined Greater[5])
 
-  def p8(a: String, b: String): IO[Unit] = {
+  def p8(a: String, b: Int): IO[Unit] = {
     val result =
       for {
         x <- refineV[NonEmpty](a)
-        y <- refineV[NonEmpty](b)
+        y <- refineV[Greater[5]](b)
       } yield MyType(x, y)
     putStrLn(result)
   }
 
-  def p9(a: String, b: String): IO[Unit] = {
+  def p9(a: String, b: Int): IO[Unit] = {
     val result =
-      (refineV[NonEmpty](a).toEitherNel, refineV[NonEmpty](b).toEitherNel)
+      (refineV[NonEmpty](a).toEitherNel, refineV[Greater[5]](b).toEitherNel)
         .parMapN(MyType.apply) // Validated conversion via Parallel
     putStrLn(result)
   }
 
-  def p10(a: String, b: String): IO[Unit] = {
+  def p10(a: String, b: Int): IO[Unit] = {
     val result =
-      (refineV[NonEmpty](a).toValidatedNel, refineV[NonEmpty](b).toValidatedNel)
+      (refineV[NonEmpty](a).toValidatedNel, refineV[Greater[5]](b).toValidatedNel)
         .mapN(MyType.apply)
     putStrLn(result)
   }
 
   def run(args: List[String]): IO[ExitCode] =
-    c6("", "", "#").as(ExitCode.Success)
+    p9("", 4).as(ExitCode.Success)
 }
 
 object types {
