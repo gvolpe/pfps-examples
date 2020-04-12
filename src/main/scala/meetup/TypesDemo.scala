@@ -57,9 +57,9 @@ object TypesDemo extends IOApp {
 
   val p2: IO[Unit] =
     (
-      UserNameP.make("jr"),
-      NameP.make("Joe Reef"),
-      EmailP.make("joe@bar.com")
+      UserNameP("jr"),
+      NameP("Joe Reef"),
+      EmailP("joe@bar.com")
     ).tupled.fold(IO.unit) {
       case (u, n, e) => putStrLn(showNameP(u, n, e))
     }
@@ -148,7 +148,7 @@ object TypesDemo extends IOApp {
 
   val p7: IO[Unit] =
     putStrLn(">>>>>>>> Unwrapping Newtype <<<<<<<<") >>
-        putStrLn(AutoUnwrapping.raw)
+      putStrLn(AutoUnwrapping.raw)
 
   //--------------- Refined + Validated ----------------
 
@@ -190,19 +190,19 @@ object types {
   // --- Sealed abstract case classes ---
   sealed abstract case class UserNameP(value: String)
   object UserNameP {
-    def make(value: String): Option[UserNameP] =
+    def apply(value: String): Option[UserNameP] =
       if (value.nonEmpty) new UserNameP(value) {}.some else None
   }
 
   sealed abstract case class NameP(value: String)
   object NameP {
-    def make(value: String): Option[NameP] =
+    def apply(value: String): Option[NameP] =
       if (value.nonEmpty) new NameP(value) {}.some else None
   }
 
   sealed abstract case class EmailP(value: String)
   object EmailP {
-    def make(value: String): Option[EmailP] =
+    def apply(value: String): Option[EmailP] =
       if (value.contains("@")) new EmailP(value) {}.some else None
   }
 
