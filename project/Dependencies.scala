@@ -7,16 +7,16 @@ object Dependencies {
     val catsEffect   = "2.1.2"
     val catsMeowMtl  = "0.4.0"
     val console4cats = "0.8.1"
-    val derevo       = "0.11.0"
-    val fs2          = "2.2.2"
+    val derevo       = "0.11.2"
+    val fs2          = "2.3.0"
     val log4cats     = "1.0.0"
     val logback      = "1.2.1"
-    val monocle      = "2.0.2"
+    val monocle      = "2.0.4"
     val newtype      = "0.4.3"
-    val refined      = "0.9.12"
+    val refined      = "0.9.13"
 
     val betterMonadicFor = "0.3.1"
-    val contextApplied   = "0.1.2"
+    val contextApplied   = "0.1.3"
     val kindProjector    = "0.11.0"
   }
 
