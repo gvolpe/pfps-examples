@@ -149,7 +149,7 @@ object TypesDemo extends IOApp {
 
   val p7: IO[Unit] =
     putStrLn(">>>>>>>> Unwrapping Newtype <<<<<<<<") >>
-      putStrLn(AutoUnwrapping.raw)
+        putStrLn(AutoUnwrapping.raw)
 
   //--------------- Refined + Validated ----------------
 
@@ -241,21 +241,11 @@ object NewtypeRefinedOps {
 }
 
 object AutoUnwrapping {
-  import io.estatico.newtype.Coercible
-  import io.estatico.newtype.ops._
-  import types._
-  //implicit def autoUnwrap[F[_, _], T, P](tp: F[T, P])(implicit rt: RefType[F]): T =
+  import eu.timepit.refined.types.numeric.PosInt
 
-  // Doesn't work yet -_-
-  implicit def autoUnwrapNewtypeOfRefined[F[_, _]: RefType, T, P, A: Coercible[F[T, P], *]](a: A): T =
-    autoUnwrap[F, T, P](a.repr.asInstanceOf[F[T, P]])
+  @newsubtype(optimizeOps = false) case class Numer(value: PosInt)
 
-  //implicit def autoUnwrapNewtype[A: Coercible[B, *], B](a: A): B =
-  //  a.repr
+  val n1 = Numer(87)
 
-  val u1 = UserName("gvolpe")
-  val u2 = UserNameT("jconway")
-
-  val raw: NonEmptyString = u1.value
-
+  val raw: Int = n1 // double unwrapping
 }
