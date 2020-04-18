@@ -61,9 +61,9 @@ object TypesDemo extends IOApp {
       UserNameP("jr"),
       NameP("Joe Reef"),
       EmailP("joe@bar.com")
-    ).tupled.fold(IO.unit) {
+    ).traverseN {
       case (u, n, e) => putStrLn(showNameP(u, n, e))
-    }
+    }.void
 
   // ----------------- Newtypes -------------------
 
@@ -149,7 +149,7 @@ object TypesDemo extends IOApp {
 
   val p7: IO[Unit] =
     putStrLn(">>>>>>>> Unwrapping Newtype <<<<<<<<") >>
-        putStrLn(AutoUnwrapping.raw)
+      putStrLn(AutoUnwrapping.raw)
 
   //--------------- Refined + Validated ----------------
 
