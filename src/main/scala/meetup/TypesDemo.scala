@@ -138,9 +138,9 @@ object TypesDemo extends IOApp {
     import NewtypeRefinedOps._
     val result =
       (
-        validate[UserName, NonEmpty](u),
-        validate[Name, NonEmpty](n),
-        validate[Email, Contains['@']](e)
+        validate[UserName](u),
+        validate[Name](n),
+        validate[Email](e)
       ).parMapN(showNameTR)
     putStrLn(result)
   }
@@ -228,15 +228,15 @@ object NewtypeRefinedOps {
   import io.estatico.newtype.Coercible
   import io.estatico.newtype.ops._
 
-  final class NewtypeRefinedPartiallyApplied[A, P] {
-    def apply[T](raw: T)(
-        implicit v: Validate[T, P],
-        c: Coercible[Refined[T, P], A]
+  final class NewtypeRefinedPartiallyApplied[A] {
+    def apply[T, P](raw: T)(
+        implicit c: Coercible[Refined[T, P], A],
+        v: Validate[T, P]
     ): EitherNel[String, A] =
       refineV[P](raw).toEitherNel.map(_.coerce[A])
   }
 
-  def validate[A, P]: NewtypeRefinedPartiallyApplied[A, P] = new NewtypeRefinedPartiallyApplied[A, P]
+  def validate[A]: NewtypeRefinedPartiallyApplied[A] = new NewtypeRefinedPartiallyApplied[A]
 
 }
 
