@@ -12,7 +12,7 @@ object Dependencies {
     val log4cats     = "1.0.0"
     val logback      = "1.2.1"
     val monocle      = "2.0.4"
-    val newtype      = "0.4.3"
+    val newtype      = "0.4.4"
     val refined      = "0.9.14"
 
     val betterMonadicFor = "0.3.1"
