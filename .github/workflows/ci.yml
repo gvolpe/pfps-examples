@@ -27,7 +27,7 @@ jobs:
           architecture: x64
           java-package: jdk
           java-version: "${{ matrix.java}}"
-      - run: "sbt \"++${{ matrix.java}} test\""
+      - run: "sbt \"++${{ matrix.scala}} test\""
     strategy:
       matrix:
         java:
