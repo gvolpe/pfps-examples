@@ -1,6 +1,6 @@
 let
-  # unstable packages on April 24
-  pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs-channels/archive/10100a97c89.tar.gz") {};
+  # unstable packages on May 13th
+  pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs-channels/archive/6bcb1dec8ea.tar.gz") {};
   stdenv = pkgs.stdenv;
 
 in stdenv.mkDerivation rec {
