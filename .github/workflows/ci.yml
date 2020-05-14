@@ -21,13 +21,13 @@ jobs:
           key: "${{ runner.os }}-coursier-${{ hashFiles('gha.cache.tmp') }}"
           path: "~/.cache/coursier"
           restore-keys: coursier
-      - name: "java ${{ matrix.scala}} setup"
+      - name: "java ${{ matrix.java}} setup"
         uses: "actions/setup-java@v1"
         with:
           architecture: x64
           java-package: jdk
-          java-version: "${{ matrix.scala}}"
-      - run: "sbt \"++${{ matrix.scala}} test\""
+          java-version: "${{ matrix.java}}"
+      - run: "sbt \"++${{ matrix.java}} test\""
     strategy:
       matrix:
         java:

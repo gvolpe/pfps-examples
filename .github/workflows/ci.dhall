@@ -41,9 +41,9 @@ in  GithubActions.Workflow::{
           , steps =
                 setup
               # [ GithubActions.steps.java-setup
-                    { java-version = "\${{ matrix.scala}}" }
+                    { java-version = "\${{ matrix.java}}" }
                 , GithubActions.steps.run
-                    { run = "sbt \"++\${{ matrix.scala}} test\"" }
+                    { run = "sbt \"++\${{ matrix.java}} test\"" }
                 ]
           }
         }
