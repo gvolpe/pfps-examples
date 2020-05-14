@@ -1,17 +1,43 @@
-name: Build
-
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: "actions/checkout@v2.1.0"
+      - run: |
+          shasum build.sbt \
+            project/plugins.sbt \
+            project/build.properties \
+            project/Dependencies.scala > gha.cache.tmp
+      - name: "~/.sbt cache"
+        uses: "actions/cache@v1"
+        with:
+          key: "${{ runner.os }}-sbt-${{ hashFiles('gha.cache.tmp') }}"
+          path: "~/.sbt"
+          restore-keys: sbt
+      - name: "~/.cache/coursier cache"
+        uses: "actions/cache@v1"
+        with:
+          key: "${{ runner.os }}-coursier-${{ hashFiles('gha.cache.tmp') }}"
+          path: "~/.cache/coursier"
+          restore-keys: coursier
+      - name: "java ${{ matrix.java}} setup"
+        uses: "actions/setup-java@v1"
+        with:
+          architecture: x64
+          java-package: jdk
+          java-version: "${{ matrix.java}}"
+      - run: "sbt \"++${{ matrix.scala}} test\""
+    strategy:
+      matrix:
+        java:
+          - '8.0.242'
+          - '11.0.5'
+        scala:
+          - '2.13.2'
+name: Scala
 on:
+  pull_request: {}
   push:
     branches:
       - master
-  pull_request:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v1
-    - uses: olafurpg/setup-scala@v5
-    - name: Tests
-      run: sbt -J-Xms4G -J-Xmx4G test
