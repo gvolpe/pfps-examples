@@ -35,7 +35,7 @@ in  GithubActions.Workflow::{
     , jobs = toMap
         { build = GithubActions.Job::{
           , name = "Build"
-          , needs = Some [ "checks" ]
+          , needs = None (List Text)
           , strategy = Some GithubActions.Strategy::{ matrix = matrix }
           , runs-on = GithubActions.types.RunsOn.ubuntu-latest
           , steps =
