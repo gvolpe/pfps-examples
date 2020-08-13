@@ -11,7 +11,7 @@ object Dependencies {
     val fs2          = "2.4.2"
     val log4cats     = "1.0.0"
     val logback      = "1.2.1"
-    val monocle      = "2.0.5"
+    val monocle      = "2.1.0"
     val newtype      = "0.4.4"
     val refined      = "0.9.15"
 
