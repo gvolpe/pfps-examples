@@ -1,8 +1,8 @@
 package meetup
 
 import cats.effect._
-import cats.effect.concurrent.Ref
 import cats.implicits._
+import cats.effect.Ref
 
 object StateDemo extends IOApp {
   def putStrLn[A](a: A): IO[Unit] = IO(println(a))

@@ -4,7 +4,6 @@ import cats._
 import cats.data.Kleisli
 import cats.effect._
 import cats.effect.Console.implicits._
-import cats.effect.concurrent.Ref
 import cats.implicits._
 import cats.mtl._
 import cats.mtl.instances.all._
@@ -12,6 +11,7 @@ import com.olegpy.meow.effects._
 import com.olegpy.meow.hierarchy._
 import derevo.cats.show
 import derevo.derive
+import cats.effect.Ref
 
 object MtlClassyDemo extends IOApp {
   import reader._

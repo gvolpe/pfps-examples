@@ -6,10 +6,11 @@ import cats.effect.Console.io._
 import cats.effect.Console.implicits._
 import cats.implicits._
 import scala.concurrent.duration._
+import cats.effect.Temporal
 
 object BgApp extends IOApp {
 
-  def program[F[_]: Background: Console: FlatMap: Timer]: F[Unit] =
+  def program[F[_]: Background: Console: FlatMap: Temporal]: F[Unit] =
     F.schedule(F.putStrLn("foo"), 3.seconds) >> F.sleep(1.second) >> program
 
   /*
