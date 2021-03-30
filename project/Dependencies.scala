@@ -3,8 +3,8 @@ import sbt._
 object Dependencies {
 
   object Versions {
-    val cats         = "2.5.0"
-    val catsEffect   = "2.4.0"
+    val cats         = "2.4.2"
+    val catsEffect   = "2.4.1"
     val catsMeowMtl  = "0.4.1"
     val console4cats = "0.8.1"
     val derevo       = "0.11.6"
@@ -13,7 +13,7 @@ object Dependencies {
     val logback      = "1.2.1"
     val monocle      = "2.1.0"
     val newtype      = "0.4.4"
-    val refined      = "0.9.21"
+    val refined      = "0.9.22"
 
     val betterMonadicFor = "0.3.1"
     val contextApplied   = "0.1.4"
