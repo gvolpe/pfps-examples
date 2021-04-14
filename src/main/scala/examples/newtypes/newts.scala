@@ -29,14 +29,13 @@ object valueclasses {
     (
       mkUsername("aeinstein"),
       mkEmail("aeinstein@research.com")
-    ).mapN {
-      case (username, email) => lookup(username, email)
+    ).mapN { case (username, email) =>
+      lookup(username, email)
     }
 
   val bar =
-    (mkUsername("aeinstein"), mkEmail("aeinstein@research.com")).mapN {
-      case (username, email) =>
-        lookup(username.copy(value = ""), email)
+    (mkUsername("aeinstein"), mkEmail("aeinstein@research.com")).mapN { case (username, email) =>
+      lookup(username.copy(value = ""), email)
     }
 }
 
