@@ -63,8 +63,8 @@ object TypesDemo extends IOApp.Simple {
       UserNameP("jr"),
       NameP("Joe Reef"),
       EmailP("joe@bar.com")
-    ).traverseN {
-      case (u, n, e) => putStrLn(showNameP(u, n, e))
+    ).traverseN { case (u, n, e) =>
+      putStrLn(showNameP(u, n, e))
     }.void
 
   // ----------------- Newtypes -------------------
@@ -229,8 +229,8 @@ object NewtypeRefinedOps {
   import io.estatico.newtype.ops._
 
   final class NewtypeRefinedPartiallyApplied[A] {
-    def apply[T, P](raw: T)(
-        implicit c: Coercible[Refined[T, P], A],
+    def apply[T, P](raw: T)(implicit
+        c: Coercible[Refined[T, P], A],
         v: Validate[T, P]
     ): EitherNel[String, A] =
       refineV[P](raw).toEitherNel.map(_.coerce[A])

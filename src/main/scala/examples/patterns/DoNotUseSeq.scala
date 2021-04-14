@@ -18,6 +18,6 @@ object DoNotUseSeq extends App {
     [error]         at scala.collection.immutable.LazyList.$anonfun$mapImpl$1(LazyList.scala:484)
     [error]         at scala.collection.immutable.LazyList$$Lambda$5728/710638503.apply(Unknown Source)
 
- */
+   */
 
 }

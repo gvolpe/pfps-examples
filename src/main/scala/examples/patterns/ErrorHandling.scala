@@ -64,8 +64,8 @@ class SameProgram[F[_]: ApplicativeThrow](
 ) {
 
   def findAll: F[List[Category]] =
-    categories.findAll.recover {
-      case RandomError => List.empty[Category]
+    categories.findAll.recover { case RandomError =>
+      List.empty[Category]
     }
 
 }
