@@ -1,13 +1,32 @@
-let
-  # unstable packages on May 13th
-  pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs-channels/archive/6bcb1dec8ea.tar.gz") {};
-  stdenv = pkgs.stdenv;
+{ jdk ? "jdk15" }:
 
-in stdenv.mkDerivation rec {
-  name = "pfps-examples";
+let
+  config = {
+    packageOverrides = p: rec {
+      java = p.${jdk};
+
+      sbt = p.sbt.overrideAttrs (
+        old: rec {
+          jre = "${java}";
+        }
+      );
+    };
+  };
+
+  nixpkgs = fetchTarball {
+    name   = "nixos-unstable-2021-02-21";
+    url    = "https://github.com/NixOS/nixpkgs/archive/9816b99e71c.tar.gz";
+    sha256 = "1dpz36i3vx0c1wmacrki0wsf30if8xq3bnj71g89rsbxyi87lhcm";
+  };
+
+  pkgs = import nixpkgs { inherit config; };
+in
+pkgs.mkShell {
+  name = "scala-shell";
+
   buildInputs = [
-    pkgs.haskellPackages.dhall-json
-    pkgs.openjdk
+    pkgs.coursier
+    pkgs.${jdk}
     pkgs.sbt
   ];
 }

@@ -2,54 +2,61 @@ import sbt._
 
 object Dependencies {
 
-  object Versions {
-    val cats         = "2.5.0"
-    val catsEffect   = "2.4.1"
-    val catsMeowMtl  = "0.4.1"
-    val console4cats = "0.8.1"
-    val derevo       = "0.11.6"
-    val fs2          = "2.5.4"
-    val log4cats     = "1.0.0"
-    val logback      = "1.2.1"
-    val monocle      = "2.1.0"
-    val newtype      = "0.4.4"
-    val refined      = "0.9.23"
+  object V {
+    val cats       = "2.5.0"
+    val catsEffect = "3.0.2"
+    val catsMtl    = "1.1.3"
+    val derevo     = "0.12.2"
+    val fs2        = "3.0.1"
+    val log4cats   = "2.0.1"
+    val logback    = "1.2.1"
+    val monocle    = "2.1.0"
+    val newtype    = "0.4.4"
+    val refined    = "0.9.23"
+    val tofu       = "0.10.1"
 
     val betterMonadicFor = "0.3.1"
-    val contextApplied   = "0.1.4"
     val kindProjector    = "0.11.3"
+    val organizeImports  = "0.5.0"
   }
 
   object Libraries {
-    val cats         = "org.typelevel"  %% "cats-core"    % Versions.cats
-    val catsEffect   = "org.typelevel"  %% "cats-effect"  % Versions.catsEffect
-    val console4cats = "dev.profunktor" %% "console4cats" % Versions.console4cats
-    val fs2          = "co.fs2"         %% "fs2-core"     % Versions.fs2
+    def derevo(artifact: String): ModuleID = "tf.tofu" %% s"derevo-$artifact" % V.derevo
 
-    val catsMeowMtlCore    = "com.olegpy" %% "meow-mtl-core"    % Versions.catsMeowMtl
-    val catsMeowMtlEffects = "com.olegpy" %% "meow-mtl-effects" % Versions.catsMeowMtl
+    val cats       = "org.typelevel" %% "cats-core"   % V.cats
+    val catsEffect = "org.typelevel" %% "cats-effect" % V.catsEffect
+    val catsMtl    = "org.typelevel" %% "cats-mtl"    % V.catsMtl
+    val fs2        = "co.fs2"        %% "fs2-core"    % V.fs2
 
-    val derevoCats    = "org.manatki" %% "derevo-cats"         % Versions.derevo
-    val derevoTagless = "org.manatki" %% "derevo-cats-tagless" % Versions.derevo
+    //val catsMeowMtlCore    = "com.olegpy" %% "meow-mtl-core"    % V.catsMeowMtl
+    //val catsMeowMtlEffects = "com.olegpy" %% "meow-mtl-effects" % V.catsMeowMtl
 
-    val refinedCore = "eu.timepit" %% "refined"      % Versions.refined
-    val refinedCats = "eu.timepit" %% "refined-cats" % Versions.refined
+    val derevoCats          = derevo("cats")
+    val derevoCirceMagnolia = derevo("circe-magnolia")
+    val derevoTagless       = derevo("cats-tagless")
 
-    val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % Versions.log4cats
-    val newtype  = "io.estatico"       %% "newtype"        % Versions.newtype
+    val tofu = "tf.tofu" %% "tofu-core-higher-kind" % V.tofu
 
-    val monocleCore  = "com.github.julien-truffaut" %% "monocle-core"  % Versions.monocle
-    val monocleMacro = "com.github.julien-truffaut" %% "monocle-macro" % Versions.monocle
+    val refinedCore = "eu.timepit" %% "refined"      % V.refined
+    val refinedCats = "eu.timepit" %% "refined-cats" % V.refined
+
+    val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % V.log4cats
+    val newtype  = "io.estatico"       %% "newtype"        % V.newtype
+
+    val monocleCore  = "com.github.julien-truffaut" %% "monocle-core"  % V.monocle
+    val monocleMacro = "com.github.julien-truffaut" %% "monocle-macro" % V.monocle
 
     // Runtime
-    val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
+    val logback = "ch.qos.logback" % "logback-classic" % V.logback
+
+    // Scalafix rules
+    val organizeImports = "com.github.liancheng" %% "organize-imports" % V.organizeImports
   }
 
   object CompilerPlugins {
-    val betterMonadicFor = compilerPlugin("com.olegpy"     %% "better-monadic-for" % Versions.betterMonadicFor)
-    val contextApplied   = compilerPlugin("org.augustjune" %% "context-applied"    % Versions.contextApplied)
+    val betterMonadicFor = compilerPlugin("com.olegpy" %% "better-monadic-for" % V.betterMonadicFor)
     val kindProjector = compilerPlugin(
-      "org.typelevel" %% "kind-projector" % Versions.kindProjector cross CrossVersion.full
+      "org.typelevel" %% "kind-projector" % V.kindProjector cross CrossVersion.full
     )
   }
 

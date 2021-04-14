@@ -1,14 +1,13 @@
 package meetup
 
 import cats.effect._
-import cats.effect.concurrent.Ref
+import cats.effect.kernel.Ref
 import cats.implicits._
 
-object StateDemo extends IOApp {
+object StateDemo extends IOApp.Simple {
   def putStrLn[A](a: A): IO[Unit] = IO(println(a))
 
-  def run(args: List[String]): IO[ExitCode] =
-    p2.as(ExitCode.Success)
+  def run: IO[Unit] = p2
 
   // ------- Sharing a Ref directly -------
   def incrByOne(ref: Ref[IO, Int]): IO[Unit] =

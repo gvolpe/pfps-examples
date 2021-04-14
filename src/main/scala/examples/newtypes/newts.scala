@@ -15,7 +15,7 @@ object valueclasses {
     IO.pure(User(username, email).some)
 
   case class Username private (val value: String) extends AnyVal
-  case class Email private (val value: String) extends AnyVal
+  case class Email private (val value: String)    extends AnyVal
 
   def mkUsername(value: String): Option[Username] =
     if (value.nonEmpty) Username(value).some

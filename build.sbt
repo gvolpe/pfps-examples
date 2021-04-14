@@ -1,30 +1,35 @@
 import Dependencies._
 
-ThisBuild / scalaVersion := "2.13.2"
+ThisBuild / scalaVersion := "2.13.5"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "dev.profunktor"
 ThisBuild / organizationName := "ProfunKtor"
 
+ThisBuild / scalafixDependencies += Libraries.organizeImports
+
+resolvers += Resolver.sonatypeRepo("snapshots")
+
 lazy val root = (project in file("."))
   .settings(
-    name := "examples",
-    scalacOptions += "-Ymacro-annotations",
+    name := "pfps-examples",
+    scalacOptions ++= List("-Ymacro-annotations", "-Yrangepos", "-Wconf:cat=unused:info"),
     scalafmtOnCompile := true,
     libraryDependencies ++= Seq(
       CompilerPlugins.betterMonadicFor,
-      CompilerPlugins.contextApplied,
       CompilerPlugins.kindProjector,
       Libraries.cats,
       Libraries.catsEffect,
-      Libraries.catsMeowMtlCore,
-      Libraries.catsMeowMtlEffects,
-      Libraries.console4cats,
+      Libraries.catsMtl,
       Libraries.derevoCats,
+      Libraries.derevoCirceMagnolia,
       Libraries.derevoTagless,
       Libraries.fs2,
       Libraries.monocleCore,
       Libraries.monocleMacro,
       Libraries.newtype,
-      Libraries.refinedCore
+      Libraries.refinedCore,
+      Libraries.tofu
     )
   )
+
+addCommandAlias("runLinter", ";scalafixAll --rules OrganizeImports")

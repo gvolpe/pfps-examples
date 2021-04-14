@@ -5,7 +5,7 @@ import cats.arrow.FunctionK
 import cats.data.Tuple2K
 import cats.implicits._
 import cats.tagless._
-import derevo.cats.{ eq => eqv, _ }
+import derevo.cats._
 import derevo.derive
 import derevo.tagless.{ applyK, flatMap }
 
@@ -23,10 +23,10 @@ object typeclass {
   val a = Concrete("a")
   val b = Concrete("b")
 
-  a === b // from Eq
+  a === b  // from Eq
   a.min(b) // from Order
-  a |+| b // from Semigroup
-  a.show // from Show
+  a |+| b  // from Semigroup
+  a.show   // from Show
 
   // --- Higher-kinded type `* -> *`
   @derive(flatMap)
@@ -39,9 +39,9 @@ object typeclass {
   FlatMap[HigherKind]
   Semigroupal[HigherKind]
 
-  KindOne.map(_ * 2) // from Functor
-  KindTwo.void // from Functor
-  KindTwo >> KindOne // from FlatMap
+  KindOne.map(_ * 2)        // from Functor
+  KindTwo.void              // from Functor
+  KindTwo >> KindOne        // from FlatMap
   (KindOne, KindTwo).tupled // from Semigroupal
   (KindOne, KindTwo).mapN { // from Apply
     case (x, y) => s"$x - $y"

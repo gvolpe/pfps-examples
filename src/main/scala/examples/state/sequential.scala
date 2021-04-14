@@ -2,9 +2,8 @@ package examples.state
 
 import cats.data._
 import cats.effect._
-import cats.implicits._
 
-object sequential extends IOApp {
+object sequential extends IOApp.Simple {
 
   val nextInt: State[Int, Int] =
     State(s => (s + 1, s * 2))
@@ -26,12 +25,7 @@ object sequential extends IOApp {
       n3 <- ioNextInt
     } yield n1 + n2 + n3
 
-  def run(args: List[String]): IO[ExitCode] =
-    ioa
-      .run(1)
-      .flatMap(x => IO(println(x)))
-      .start
-      .void
-      .as(ExitCode.Success)
+  def run: IO[Unit] =
+    ioa.run(1).flatMap(IO.println).start.void
 
 }

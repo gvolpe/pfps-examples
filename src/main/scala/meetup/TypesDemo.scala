@@ -13,7 +13,7 @@ import eu.timepit.refined.types.string.NonEmptyString
 import scala.util.control.NoStackTrace
 import shapeless._
 
-object TypesDemo extends IOApp {
+object TypesDemo extends IOApp.Simple {
   def putStrLn[A](a: A): IO[Unit] = IO(println(a))
 
   def showName(username: String, name: String, email: String): String =
@@ -21,6 +21,8 @@ object TypesDemo extends IOApp {
       Hi $name! Your username is $username
       and your email is $email.
      """
+
+  def run: IO[Unit] = p9("", 4)
 
   val p0: IO[Unit] =
     putStrLn(showName("gvolpe@github.com", "12345", "foo"))
@@ -93,7 +95,7 @@ object TypesDemo extends IOApp {
   def mkEmail(value: String): Option[EmailT] =
     if (value.contains("@")) EmailT(value).some else None
 
-  case object EmptyError extends NoStackTrace
+  case object EmptyError   extends NoStackTrace
   case object InvalidEmail extends NoStackTrace
 
   val p4: IO[Unit] =
@@ -178,15 +180,13 @@ object TypesDemo extends IOApp {
     putStrLn(result)
   }
 
-  def run(args: List[String]): IO[ExitCode] =
-    p9("", 4).as(ExitCode.Success)
 }
 
 object types {
   // --- Value classes ---
   final case class UserNameV(value: String) extends AnyVal
-  final case class NameV(value: String) extends AnyVal
-  final case class EmailV(value: String) extends AnyVal
+  final case class NameV(value: String)     extends AnyVal
+  final case class EmailV(value: String)    extends AnyVal
 
   // --- Sealed abstract case classes ---
   sealed abstract case class UserNameP(value: String)

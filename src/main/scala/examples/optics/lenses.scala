@@ -33,8 +33,8 @@ object lenses extends App {
     )
   )
 
-  println(addressLens.get(person)) // current address
-  println(composedLens.get(person)) // current street name
+  println(addressLens.get(person))                     // current address
+  println(composedLens.get(person))                    // current street name
   println(composedLens.set(StreetName("foo"))(person)) // person with new address
 
 }

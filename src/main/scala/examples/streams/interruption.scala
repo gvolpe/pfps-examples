@@ -1,7 +1,7 @@
 package examples.streams
 
 import cats.effect._
-import cats.effect.concurrent.Deferred
+import cats.effect.kernel.Deferred
 import cats.implicits._
 import fs2._
 import fs2.concurrent.SignallingRef
@@ -9,11 +9,11 @@ import java.time.Instant
 import scala.concurrent.duration._
 import scala.util.Random
 
-object interruption extends IOApp {
+object interruption extends IOApp.Simple {
 
   def putStrLn[A](a: A): IO[Unit] =
     IO(Instant.now()).flatMap { now =>
-      IO(println(s"[$now] - $a"))
+      IO.println(s"[$now] - $a")
     }
 
   // interruptAfter example
@@ -76,7 +76,7 @@ object interruption extends IOApp {
     Stream.sleep[IO](5.seconds) >> Stream.eval(putStrLn("done s1"))
 
   val s2 =
-    Stream.random[IO].evalMap(putStrLn(_)).metered(1.second).interruptAfter(10.seconds)
+    Stream.eval(IO(Random.nextInt(100))).evalMap(putStrLn(_)).metered(1.second).interruptAfter(10.seconds)
 
   val p4 =
     Stream(s1, s2).parJoin(2)
@@ -84,7 +84,6 @@ object interruption extends IOApp {
   val p5 =
     Stream(s1, s2.concurrently(p1)).parJoin(2)
 
-  def run(args: List[String]): IO[ExitCode] =
-    p2.compile.drain.as(ExitCode.Success)
+  def run: IO[Unit] = p2.compile.drain
 
 }

@@ -13,15 +13,17 @@ trait Random[F[_]] {
 }
 
 object Random {
+  def apply[F[_]: Random]: Random[F] = implicitly
+
   implicit def syncInstance[F[_]: Sync]: Random[F] =
     new Random[F] {
       def bool: F[Boolean] = int.map(_ % 2 === 0)
-      def int: F[Int]      = F.delay(scala.util.Random.nextInt(100))
+      def int: F[Int]      = Sync[F].delay(scala.util.Random.nextInt(100))
     }
 }
 
 sealed trait BusinessError extends NoStackTrace
-case object RandomError extends BusinessError
+case object RandomError    extends BusinessError
 //case object AnotherError extends BusinessError // uncomment to see issue
 
 trait Categories[F[_]] {
@@ -29,18 +31,16 @@ trait Categories[F[_]] {
   def maybeFindAll: F[Either[BusinessError, List[Category]]]
 }
 
-class LiveCategories[
-    F[_]: MonadError[*[_], Throwable]: Random
-] extends Categories[F] {
+class LiveCategories[F[_]: MonadThrow: Random] extends Categories[F] {
 
   def findAll: F[List[Category]] =
-    F.bool.ifM(
+    Random[F].bool.ifM(
       List.empty[Category].pure[F],
       RandomError.raiseError[F, List[Category]]
     )
 
   def maybeFindAll: F[Either[BusinessError, List[Category]]] =
-    F.bool.map {
+    Random[F].bool.map {
       case true  => List.empty[Category].asRight[BusinessError]
       case false => RandomError.asLeft[List[Category]]
     }
@@ -59,12 +59,12 @@ class Program[F[_]: Functor](
 
 }
 
-class SameProgram[F[_]: ApplicativeError[*[_], Throwable]](
+class SameProgram[F[_]: ApplicativeThrow](
     categories: Categories[F]
 ) {
 
   def findAll: F[List[Category]] =
-    categories.findAll.handleError {
+    categories.findAll.recover {
       case RandomError => List.empty[Category]
     }
 
