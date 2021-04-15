@@ -15,7 +15,7 @@ object MidTown extends IOApp.Simple {
       .make(Metrics.make[IO], Logger.make[IO])
       .register("gvolpe")
       .flatMap { res =>
-        IO(println(s"[MAIN] - Program ended with $res"))
+        IO.println(s"[MAIN] - Program ended with $res")
       }
 }
 
@@ -24,10 +24,10 @@ trait Metrics[F[_]] {
 }
 
 object Metrics {
-  def make[F[_]: LiftIO: FlatMap]: Metrics[F] =
+  def make[F[_]: FlatMap: LiftIO]: Metrics[F] =
     new Metrics[F] {
       def timed[A](metricsKey: String)(fa: F[A]): F[A] =
-        IO(println(s"[METR] - Key: $metricsKey")).to[F] >> fa
+        IO.println(s"[METR] - Key: $metricsKey").to[F] >> fa
     }
 }
 
@@ -39,7 +39,7 @@ object Logger {
   def make[F[_]: LiftIO]: Logger[F] =
     new Logger[F] {
       def info(str: String): F[Unit] =
-        IO(println(s"[INFO] - $str")).to[F]
+        IO.println(s"[INFO] - $str").to[F]
     }
 }
 
@@ -67,11 +67,10 @@ object UserStore {
       }
 
   private final class UserLogger[F[_]: FlatMap](L: Logger[F]) extends UserStore[Mid[F, *]] {
-    def register(username: String): Mid[F, Int] =
-      fa =>
-        L.info(s"Calling UserStore with username: $username") *> fa.flatTap { len =>
-          L.info(s"UserStore returned $len")
-        }
+    def register(username: String): Mid[F, Int] = fa =>
+      L.info(s"Calling UserStore with username: $username") *> fa.flatTap { len =>
+        L.info(s"UserStore returned $len")
+      }
   }
 
   private final class UserMetrics[F[_]](M: Metrics[F]) extends UserStore[Mid[F, *]] {
