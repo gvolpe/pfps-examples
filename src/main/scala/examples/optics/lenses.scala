@@ -15,11 +15,11 @@ object lenses extends App {
 
   case class Person(name: PersonName, age: PersonAge, address: Address)
 
-  val _Address    = GenLens[Person](_.address)
-  val _StreetName = GenLens[Address](_.streetName)
+  val _PersonAddress     = GenLens[Person](_.address)
+  val _AddressStreetName = GenLens[Address](_.streetName)
 
-  val composedLens: Lens[Person, StreetName] =
-    _Address.andThen(_StreetName)
+  val PersonStreetName: Lens[Person, StreetName] =
+    _PersonAddress.andThen(_AddressStreetName)
 
   val person = Person(
     name = PersonName("Homer Simpson"),
@@ -38,8 +38,8 @@ object lenses extends App {
 
   println("Lenses example using the classic encoding")
 
-  println(_Address.get(person))                            // current address
-  println(composedLens.get(person))                        // current street name
-  println(composedLens.replace(StreetName("foo"))(person)) // person with new address
+  println(_PersonAddress.get(person))                          // current address
+  println(PersonStreetName.get(person))                        // current street name
+  println(PersonStreetName.replace(StreetName("foo"))(person)) // person with new address
 
 }
