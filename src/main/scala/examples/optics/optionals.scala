@@ -3,7 +3,7 @@ package examples.optics
 import io.estatico.newtype.macros.newtype
 import monocle.macros.GenLens
 import monocle.syntax.all._
-import monocle.{Focus, Optional}
+import monocle.{ Focus, Optional }
 
 object optionals extends App {
 
@@ -11,11 +11,11 @@ object optionals extends App {
   case class Album(name: AlbumName, year: Int)
   case class Song(name: String, album: Option[Album])
 
-  val albumNameLens = GenLens[Album](_.name)
-  val songAlbumLens = GenLens[Song](_.album)
+  val _AlbumName = GenLens[Album](_.name)
+  val _SongAlbum = GenLens[Song](_.album)
 
-  val songAlbumNameOpt: Optional[Song, AlbumName] =
-    songAlbumLens.some.andThen(albumNameLens)
+  val __SongAlbumName: Optional[Song, AlbumName] =
+    _SongAlbum.some.andThen(_AlbumName)
 
   val album = Album(AlbumName("Peluso of Milk"), 1991)
   val song1 = Song("Ganges", Some(album))
@@ -31,7 +31,7 @@ object optionals extends App {
 
   println("Optionals example using the classic encoding")
 
-  println(songAlbumNameOpt.getOption(song1)) // Some(Peluso of Milk)
-  println(songAlbumNameOpt.getOption(song2)) // None
+  println(__SongAlbumName.getOption(song1)) // Some(Peluso of Milk)
+  println(__SongAlbumName.getOption(song2)) // None
 
 }

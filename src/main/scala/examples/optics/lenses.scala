@@ -1,6 +1,7 @@
 package examples.optics
 
 import monocle.Lens
+import monocle.macros.GenLens
 import monocle.syntax.all._
 
 object lenses extends App {
@@ -14,14 +15,11 @@ object lenses extends App {
 
   case class Person(name: PersonName, age: PersonAge, address: Address)
 
-  val addressLens: Lens[Person, Address] =
-    Lens[Person, Address](_.address)(a => p => p.copy(address = a))
-
-  val streetNameLens: Lens[Address, StreetName] =
-    Lens[Address, StreetName](_.streetName)(s => a => a.copy(streetName = s))
+  val _Address    = GenLens[Person](_.address)
+  val _StreetName = GenLens[Address](_.streetName)
 
   val composedLens: Lens[Person, StreetName] =
-    addressLens.andThen(streetNameLens)
+    _Address.andThen(_StreetName)
 
   val person = Person(
     name = PersonName("Homer Simpson"),
@@ -40,7 +38,7 @@ object lenses extends App {
 
   println("Lenses example using the classic encoding")
 
-  println(addressLens.get(person))                         // current address
+  println(_Address.get(person))                            // current address
   println(composedLens.get(person))                        // current street name
   println(composedLens.replace(StreetName("foo"))(person)) // person with new address
 

@@ -1,31 +1,31 @@
 package examples.optics
 
 import monocle.Prism
+import monocle.macros.GenPrism
+import monocle.std.option.some
 
 object prisms extends App {
 
   sealed trait Vehicle
-  case object Car  extends Vehicle
-  case object Boat extends Vehicle
+  object Vehicle {
+    case object Car  extends Vehicle
+    case object Boat extends Vehicle
 
-  type Car = Car.type
+    val __Car  = GenPrism[Vehicle, Car.type]
+    val __Boat = GenPrism[Vehicle, Boat.type]
+  }
 
-  val vPrism: Prism[Vehicle, Car] =
-    Prism.partial[Vehicle, Car] { case c: Car => c }(identity)
-
-  val a = vPrism(Car)            // Car
-  val b = vPrism.getOption(Boat) // None
-  val c = vPrism.getOption(Car)  // Some(Car)
+  import Vehicle._
 
   println("Prisms example")
 
-  val ps: Prism[Option[String], String] =
-    Prism.partial[Option[String], String] { case Some(v) => v }(Option.apply)
+  println(__Car.getOption(Boat)) // None
+  println(__Car.getOption(Car))  // Some(Car)
 
-  val pi: Prism[String, Int] =
-    Prism.partial[String, Int] { case v if v.toIntOption.isDefined => v.toInt }(_.toString)
+  val __StringInt: Prism[String, Int] =
+    Prism[String, Int](_.toIntOption)(_.toString)
 
-  val pp: Prism[Option[String], Int] =
-    ps.andThen(pi)
+  val __OptStringInt: Prism[Option[String], Int] =
+    some.andThen(__StringInt)
 
 }

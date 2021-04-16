@@ -2,7 +2,7 @@ package examples.mid
 
 import cats._
 import cats.data.NonEmptyList
-import cats.effect.{IO, IOApp, LiftIO}
+import cats.effect.{ IO, IOApp, LiftIO }
 import derevo.derive
 import derevo.tagless.applyK
 import tofu.higherKind.Mid
