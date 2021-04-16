@@ -26,6 +26,6 @@ object prisms extends App {
     Prism.partial[String, Int] { case v if v.toIntOption.isDefined => v.toInt }(_.toString)
 
   val pp: Prism[Option[String], Int] =
-    ps.composePrism(pi)
+    ps.andThen(pi)
 
 }

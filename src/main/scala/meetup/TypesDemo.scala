@@ -1,16 +1,17 @@
 package meetup
 
+import scala.util.control.NoStackTrace
+
 import cats.data.EitherNel
 import cats.effect._
 import cats.implicits._
-import io.estatico.newtype.macros._
 import eu.timepit.refined._
 import eu.timepit.refined.api._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.{ Contains, NonEmpty }
 import eu.timepit.refined.numeric.Greater
 import eu.timepit.refined.types.string.NonEmptyString
-import scala.util.control.NoStackTrace
+import io.estatico.newtype.macros._
 import shapeless._
 
 object TypesDemo extends IOApp.Simple {

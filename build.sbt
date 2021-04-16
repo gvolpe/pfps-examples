@@ -17,6 +17,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       CompilerPlugins.betterMonadicFor,
       CompilerPlugins.kindProjector,
+      CompilerPlugins.semanticDB,
       Libraries.cats,
       Libraries.catsEffect,
       Libraries.catsMtl,

@@ -2,12 +2,11 @@ package examples.mid
 
 import cats._
 import cats.data.NonEmptyList
-import cats.effect.{ IO, IOApp }
+import cats.effect.{IO, IOApp, LiftIO}
 import derevo.derive
 import derevo.tagless.applyK
 import tofu.higherKind.Mid
 import tofu.syntax.monadic._
-import cats.effect.LiftIO
 
 object MidTown extends IOApp.Simple {
   def run: IO[Unit] =

@@ -2,12 +2,7 @@ package examples.mtl
 
 //import cats.data.StateT
 import cats.effect._
-//import cats.effect.kernel.Ref
 import cats.implicits._
-//import cats.mtl._
-//import cats.mtl.instances.all._
-//import com.olegpy.meow.effects._
-//import com.olegpy.meow.hierarchy._
 import derevo.cats.show
 import derevo.derive
 
