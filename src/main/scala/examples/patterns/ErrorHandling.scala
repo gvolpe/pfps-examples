@@ -1,9 +1,10 @@
 package examples.patterns
 
+import scala.util.control.NoStackTrace
+
 import cats._
 import cats.effect._
 import cats.implicits._
-import scala.util.control.NoStackTrace
 
 case class Category(name: String)
 

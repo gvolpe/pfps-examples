@@ -1,9 +1,10 @@
 package examples.patterns
 
+import scala.concurrent.duration._
+
 import cats.effect._
 import cats.effect.std.Semaphore
 import cats.implicits._
-import scala.concurrent.duration._
 
 object SemExample extends IOApp.Simple {
 

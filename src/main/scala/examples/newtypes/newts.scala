@@ -2,11 +2,11 @@ package examples.newtypes
 
 import cats.effect._
 import cats.implicits._
-import io.estatico.newtype.macros._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.Contains
 import eu.timepit.refined.types.string.NonEmptyString
+import io.estatico.newtype.macros._
 
 object valueclasses {
   case class User(username: Username, email: Email)

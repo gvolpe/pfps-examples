@@ -1,13 +1,15 @@
 package examples.streams
 
+import java.time.Instant
+
+import scala.concurrent.duration._
+import scala.util.Random
+
 import cats.effect._
 import cats.effect.kernel.Deferred
 import cats.implicits._
 import fs2._
 import fs2.concurrent.SignallingRef
-import java.time.Instant
-import scala.concurrent.duration._
-import scala.util.Random
 
 object interruption extends IOApp.Simple {
 

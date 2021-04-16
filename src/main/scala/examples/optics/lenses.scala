@@ -1,6 +1,7 @@
 package examples.optics
 
 import monocle.Lens
+import monocle.syntax.all._
 
 object lenses extends App {
 
@@ -20,9 +21,7 @@ object lenses extends App {
     Lens[Address, StreetName](_.streetName)(s => a => a.copy(streetName = s))
 
   val composedLens: Lens[Person, StreetName] =
-    addressLens.composeLens(streetNameLens)
-
-  println("Lenses example")
+    addressLens.andThen(streetNameLens)
 
   val person = Person(
     name = PersonName("Homer Simpson"),
@@ -33,8 +32,16 @@ object lenses extends App {
     )
   )
 
-  println(addressLens.get(person))                     // current address
-  println(composedLens.get(person))                    // current street name
-  println(composedLens.set(StreetName("foo"))(person)) // person with new address
+  println("Lenses example using the new Focus API")
+
+  println(person.focus(_.address).get)
+  println(person.focus(_.address.streetName).get)
+  println(person.focus(_.address.streetName).replace(StreetName("foo")))
+
+  println("Lenses example using the classic encoding")
+
+  println(addressLens.get(person))                         // current address
+  println(composedLens.get(person))                        // current street name
+  println(composedLens.replace(StreetName("foo"))(person)) // person with new address
 
 }
