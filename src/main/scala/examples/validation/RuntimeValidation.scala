@@ -1,21 +1,20 @@
-package meetup
+package examples.validation
 
 import scala.util.control.NoStackTrace
 
-import cats.data.EitherNel
+import cats.data.{ EitherNel, ValidatedNel }
 import cats.effect._
 import cats.implicits._
 import eu.timepit.refined._
 import eu.timepit.refined.api._
 import eu.timepit.refined.auto._
-import eu.timepit.refined.collection.{ Contains, NonEmpty }
+import eu.timepit.refined.collection.Contains
 import eu.timepit.refined.numeric.Greater
 import eu.timepit.refined.types.string.NonEmptyString
 import io.estatico.newtype.macros._
 import shapeless._
 
-object TypesDemo extends IOApp.Simple {
-  def putStrLn[A](a: A): IO[Unit] = IO(println(a))
+object RuntimeValidation extends IOApp.Simple {
 
   def showName(username: String, name: String, email: String): String =
     s"""
@@ -26,7 +25,7 @@ object TypesDemo extends IOApp.Simple {
   def run: IO[Unit] = p9("", 4)
 
   val p0: IO[Unit] =
-    putStrLn(showName("gvolpe@github.com", "12345", "foo"))
+    IO.println(showName("gvolpe@github.com", "12345", "foo"))
 
   // ----------------- Value classes -------------------
   import types._
@@ -40,7 +39,7 @@ object TypesDemo extends IOApp.Simple {
   val badUserName = UserNameV("gvolpe@github.com")
 
   val p1: IO[Unit] =
-    putStrLn(
+    IO.println(
       showNameV(
         badUserName.copy(value = ""),
         NameV("12345"),
@@ -65,7 +64,7 @@ object TypesDemo extends IOApp.Simple {
       NameP("Joe Reef"),
       EmailP("joe@bar.com")
     ).traverseN { case (u, n, e) =>
-      putStrLn(showNameP(u, n, e))
+      IO.println(showNameP(u, n, e))
     }.void
 
   // ----------------- Newtypes -------------------
@@ -77,7 +76,7 @@ object TypesDemo extends IOApp.Simple {
      """
 
   val p3: IO[Unit] =
-    putStrLn(
+    IO.println(
       showNameT(
         UserNameT("gvolpe@github.com"),
         NameT("12345"),
@@ -88,13 +87,13 @@ object TypesDemo extends IOApp.Simple {
   // ----------------- Smart Constructors -------------------
 
   def mkUsername(value: String): Option[UserNameT] =
-    if (value.nonEmpty) UserNameT(value).some else None
+    (value.nonEmpty).guard[Option].as(UserNameT(value))
 
   def mkName(value: String): Option[NameT] =
-    if (value.nonEmpty) NameT(value).some else None
+    (value.nonEmpty).guard[Option].as(NameT(value))
 
   def mkEmail(value: String): Option[EmailT] =
-    if (value.contains("@")) EmailT(value).some else None
+    (value.contains("@")).guard[Option].as(EmailT(value))
 
   case object EmptyError   extends NoStackTrace
   case object InvalidEmail extends NoStackTrace
@@ -105,7 +104,7 @@ object TypesDemo extends IOApp.Simple {
       mkName("George").liftTo[IO](EmptyError),
       mkEmail("123").liftTo[IO](InvalidEmail)
     ).parMapN(showNameT)
-      .flatMap(putStrLn)
+      .flatMap(IO.println)
 
   // ----------------- Refinement Types -------------------
 
@@ -116,7 +115,7 @@ object TypesDemo extends IOApp.Simple {
      """
 
   val p5: IO[Unit] =
-    putStrLn(
+    IO.println(
       showNameR("jr", "Joe", "jr@gmail.com")
     )
 
@@ -129,7 +128,7 @@ object TypesDemo extends IOApp.Simple {
      """
 
   val p6: IO[Unit] =
-    putStrLn(
+    IO.println(
       showNameTR(
         UserName("jr"),
         Name("John"),
@@ -145,42 +144,71 @@ object TypesDemo extends IOApp.Simple {
         validate[Name](n),
         validate[Email](e)
       ).parMapN(showNameTR)
-    putStrLn(result)
+    IO.println(result)
   }
 
   //--------------- Auto unwrapping ----------------
 
   val p7: IO[Unit] =
-    putStrLn(">>>>>>>> Unwrapping Newtype <<<<<<<<") >>
-      putStrLn(AutoUnwrapping.raw)
+    IO.println(">>>>>>>> Unwrapping Newtype <<<<<<<<") >>
+      IO.println(AutoUnwrapping.raw)
 
   //--------------- Refined + Validated ----------------
 
-  case class MyType(a: NonEmptyString, b: Int Refined Greater[5])
+  type GTFive = Int Refined Greater[5]
+  object GTFive extends RefinedTypeOps[GTFive, Int]
+
+  case class MyType(a: NonEmptyString, b: GTFive)
 
   def p8(a: String, b: Int): IO[Unit] = {
     val result =
       for {
-        x <- refineV[NonEmpty](a)
-        y <- refineV[Greater[5]](b)
+        x <- NonEmptyString.from(a) // refineV[NonEmpty](a)
+        y <- GTFive.from(b) // refineV[Greater[5]](b)
       } yield MyType(x, y)
-    putStrLn(result)
+    IO.println(result)
   }
 
   def p9(a: String, b: Int): IO[Unit] = {
-    val result =
-      (refineV[NonEmpty](a).toEitherNel, refineV[Greater[5]](b).toEitherNel)
+    val result: EitherNel[String, MyType] =
+      (NonEmptyString.from(a).toEitherNel, GTFive.from(b).toEitherNel)
         .parMapN(MyType.apply) // Validated conversion via Parallel
-    putStrLn(result)
+    IO.println(result)
   }
 
   def p10(a: String, b: Int): IO[Unit] = {
-    val result =
-      (refineV[NonEmpty](a).toValidatedNel, refineV[Greater[5]](b).toValidatedNel)
+    val result: ValidatedNel[String, MyType] =
+      (NonEmptyString.from(a).toValidatedNel, GTFive.from(b).toValidatedNel)
         .mapN(MyType.apply)
-    putStrLn(result)
+    IO.println(result)
   }
 
+  case class Person(
+      username: UserName,
+      name: Name,
+      email: Email
+  )
+
+  def p11(u: String, n: String, e: String): IO[Unit] = {
+    val result: EitherNel[String, Person] =
+      (
+        UserNameR.from(u).toEitherNel.map(UserName.apply),
+        NameR.from(n).toEitherNel.map(Name.apply),
+        EmailR.from(e).toEitherNel.map(Email.apply)
+      ).parMapN(Person.apply)
+    IO.println(result)
+  }
+
+  def p12(u: String, n: String, e: String): IO[Unit] = {
+    import NewtypeRefinedOps._
+    val result: EitherNel[String, Person] =
+      (
+        u.as[UserName].validate,
+        n.as[Name].validate,
+        e.as[Email].validate
+      ).parMapN(Person.apply)
+    IO.println(result)
+  }
 }
 
 object types {
@@ -193,19 +221,19 @@ object types {
   sealed abstract case class UserNameP(value: String)
   object UserNameP {
     def apply(value: String): Option[UserNameP] =
-      if (value.nonEmpty) new UserNameP(value) {}.some else None
+      (value.nonEmpty).guard[Option].as(new UserNameP(value) {})
   }
 
   sealed abstract case class NameP(value: String)
   object NameP {
     def apply(value: String): Option[NameP] =
-      if (value.nonEmpty) new NameP(value) {}.some else None
+      (value.nonEmpty).guard[Option].as(new NameP(value) {})
   }
 
   sealed abstract case class EmailP(value: String)
   object EmailP {
     def apply(value: String): Option[EmailP] =
-      if (value.contains("@")) new EmailP(value) {}.some else None
+      (value.contains("@")).guard[Option].as(new EmailP(value) {})
   }
 
   // --- Newtypes ---
@@ -215,19 +243,36 @@ object types {
 
   // --- Refinement types ---
   type UserNameR = NonEmptyString
-  type NameR     = NonEmptyString
-  type EmailR    = String Refined Contains['@']
+  object UserNameR extends RefinedTypeOps[UserNameR, String]
+
+  type NameR = NonEmptyString
+  object NameR extends RefinedTypeOps[NameR, String]
+
+  type EmailR = String Refined Contains['@']
+  object EmailR extends RefinedTypeOps[EmailR, String]
 
   // --- Newtypes + Refinement types ---
-  @newtype case class UserName(value: NonEmptyString)
-  @newtype case class Name(value: NonEmptyString)
-  @newtype case class Email(value: String Refined Contains['@'])
+  @newtype case class UserName(value: UserNameR)
+  @newtype case class Name(value: NameR)
+  @newtype case class Email(value: EmailR)
 
 }
 
 object NewtypeRefinedOps {
   import io.estatico.newtype.Coercible
   import io.estatico.newtype.ops._
+
+  final class NewtypePartiallyApplied[A, T](raw: T) {
+    def validate[P](implicit
+        c: Coercible[Refined[T, P], A],
+        v: Validate[T, P]
+    ): EitherNel[String, A] =
+      refineV[P](raw).toEitherNel.map(_.coerce[A])
+  }
+
+  implicit class NewtypeOps[T](raw: T) {
+    def as[A]: NewtypePartiallyApplied[A, T] = new NewtypePartiallyApplied[A, T](raw)
+  }
 
   final class NewtypeRefinedPartiallyApplied[A] {
     def apply[T, P](raw: T)(implicit
