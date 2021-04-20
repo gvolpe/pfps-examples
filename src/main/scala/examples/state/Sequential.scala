@@ -3,7 +3,7 @@ package examples.state
 import cats.data._
 import cats.effect._
 
-object sequential extends IOApp.Simple {
+object Sequential extends IOApp.Simple {
 
   val nextInt: State[Int, Int] =
     State(s => (s + 1, s * 2))
