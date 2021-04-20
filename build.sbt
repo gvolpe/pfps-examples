@@ -9,6 +9,8 @@ ThisBuild / scalafixDependencies += Libraries.organizeImports
 
 resolvers += Resolver.sonatypeRepo("snapshots")
 
+Compile / run / fork := true
+
 lazy val root = (project in file("."))
   .settings(
     name := "pfps-examples",
