@@ -10,7 +10,7 @@ object Dependencies {
     val fs2        = "3.0.1"
     val log4cats   = "2.0.1"
     val logback    = "1.2.1"
-    val monocle    = "3.0.0-M4"
+    val monocle    = "3.0.0-M5"
     val newtype    = "0.4.4"
     val refined    = "0.9.24"
     val tofu       = "0.10.1"
