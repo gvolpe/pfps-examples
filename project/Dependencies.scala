@@ -4,21 +4,21 @@ object Dependencies {
 
   object V {
     val cats       = "2.6.0"
-    val catsEffect = "3.0.2"
+    val catsEffect = "3.1.0"
     val catsMtl    = "1.2.0"
-    val derevo     = "0.12.3"
-    val fs2        = "3.0.1"
+    val derevo     = "0.12.2"
+    val fs2        = "3.0.2"
     val log4cats   = "2.0.1"
     val logback    = "1.2.1"
-    val monocle    = "3.0.0-M4"
+    val monocle    = "3.0.0-M5"
     val newtype    = "0.4.4"
-    val refined    = "0.9.23"
+    val refined    = "0.9.24"
     val tofu       = "0.10.1"
 
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.11.3"
     val organizeImports  = "0.5.0"
-    val semanticDB       = "4.4.13"
+    val semanticDB       = "4.4.14"
   }
 
   object Libraries {
