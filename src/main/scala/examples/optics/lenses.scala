@@ -18,7 +18,7 @@ object lenses extends App {
   val _PersonAddress     = GenLens[Person](_.address)
   val _AddressStreetName = GenLens[Address](_.streetName)
 
-  val PersonStreetName: Lens[Person, StreetName] =
+  val _PersonStreetName: Lens[Person, StreetName] =
     _PersonAddress.andThen(_AddressStreetName)
 
   val person = Person(
@@ -38,8 +38,8 @@ object lenses extends App {
 
   println("Lenses example using the classic encoding")
 
-  println(_PersonAddress.get(person))                          // current address
-  println(PersonStreetName.get(person))                        // current street name
-  println(PersonStreetName.replace(StreetName("foo"))(person)) // person with new address
+  println(_PersonAddress.get(person))                           // current address
+  println(_PersonStreetName.get(person))                        // current street name
+  println(_PersonStreetName.replace(StreetName("foo"))(person)) // person with new address
 
 }
