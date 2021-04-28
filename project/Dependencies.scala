@@ -6,7 +6,7 @@ object Dependencies {
     val cats       = "2.6.0"
     val catsEffect = "3.1.0"
     val catsMtl    = "1.2.0"
-    val derevo     = "0.12.2"
+    val derevo     = "0.12.5"
     val fs2        = "3.0.2"
     val monocle    = "3.0.0-M5"
     val newtype    = "0.4.4"
