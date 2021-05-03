@@ -217,7 +217,7 @@ object types {
   final case class NameV(value: String)     extends AnyVal
   final case class EmailV(value: String)    extends AnyVal
 
-  // --- Sealed abstract case classes ---
+  // --- Sealed abstract case classes (copy is not available) ---
   sealed abstract case class UserNameP(value: String)
   object UserNameP {
     def apply(value: String): Option[UserNameP] =
@@ -234,6 +234,13 @@ object types {
   object EmailP {
     def apply(value: String): Option[EmailP] =
       (value.contains("@")).guard[Option].as(new EmailP(value) {})
+  }
+
+  // --- Sealed abstract classes (we need to add `val` to access `value`) ---
+  sealed abstract class UserNameSA(val value: String)
+  object UserNameSA {
+    def apply(value: String): Option[UserNameSA] =
+      (value.nonEmpty).guard[Option].as(new UserNameSA(value) {})
   }
 
   // --- Newtypes ---
