@@ -13,7 +13,7 @@ object Cancelation extends IOApp.Simple {
 
   val simple: IO[Unit] =
     Deferred[IO, Unit].flatMap { gate =>
-      program(gate).background.use { _ =>
+      program(gate).background.surround {
         IO.sleep(500.millis) >> IO.println("Canceling fiber")
       }
     }

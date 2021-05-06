@@ -13,10 +13,10 @@ object Regions extends IOApp.Simple {
     }.void
 
   def p1(sem: Semaphore[IO]): IO[Unit] =
-    sem.permit.use(_ => IO.println("Running P1")) >> randomSleep
+    sem.permit.surround(IO.println("Running P1")) >> randomSleep
 
   def p2(sem: Semaphore[IO]): IO[Unit] =
-    sem.permit.use(_ => IO.println("Running P2")) >> randomSleep
+    sem.permit.surround(IO.println("Running P2")) >> randomSleep
 
   def run: IO[Unit] =
     Supervisor[IO].use { s =>

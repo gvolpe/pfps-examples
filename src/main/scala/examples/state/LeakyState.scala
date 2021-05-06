@@ -13,12 +13,11 @@ object LeakyState extends IOApp.Simple {
     Semaphore[IO](1).unsafeRunSync()
 
   def launchMissiles: IO[Unit] =
-    sem.permit
-      .use { _ =>
-        IO.println("Launching missiles") >>
-          IO.sleep(3.seconds) >>
-          IO.println("Missiles launched, releasing lock")
-      }
+    sem.permit.surround {
+      IO.println("Launching missiles") >>
+        IO.sleep(3.seconds) >>
+        IO.println("Missiles launched, releasing lock")
+    }
 
   def randomSleep: IO[Unit] =
     IO(scala.util.Random.nextInt(100)).flatMap { ms =>
@@ -26,10 +25,10 @@ object LeakyState extends IOApp.Simple {
     }.void
 
   def p1: IO[Unit] =
-    sem.permit.use(_ => IO.println("Running P1")) >> randomSleep
+    sem.permit.surround(IO.println("Running P1")) >> randomSleep
 
   def p2: IO[Unit] =
-    sem.permit.use(_ => IO.println("Running P2")) >> randomSleep
+    sem.permit.surround(IO.println("Running P2")) >> randomSleep
 
   def run: IO[Unit] =
     Supervisor[IO].use { s =>
