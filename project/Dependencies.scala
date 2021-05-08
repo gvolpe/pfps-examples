@@ -16,7 +16,7 @@ object Dependencies {
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.11.3"
     val organizeImports  = "0.5.0"
-    val semanticDB       = "4.4.15"
+    val semanticDB       = "4.4.16"
   }
 
   object Libraries {
