@@ -31,6 +31,7 @@ lazy val root = (project in file("."))
       Libraries.monocleMacro,
       Libraries.newtype,
       Libraries.refinedCore,
+      Libraries.refinedCats,
       Libraries.tofu
     )
   )
