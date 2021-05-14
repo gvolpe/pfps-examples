@@ -10,7 +10,7 @@ object Dependencies {
     val fs2        = "3.0.2"
     val monocle    = "3.0.0-M5"
     val newtype    = "0.4.4"
-    val refined    = "0.9.24"
+    val refined    = "0.9.25"
     val tofu       = "0.10.2"
 
     val betterMonadicFor = "0.3.1"
