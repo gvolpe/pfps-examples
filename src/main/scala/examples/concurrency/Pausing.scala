@@ -15,15 +15,9 @@ object Pausing extends IOApp.Simple {
       .flatMap { signal =>
         val src =
           Stream
-            .fixedDelay[IO](1.second)
-            .evalTap(_ => IO.println("ping"))
+            .repeatEval(IO.println("ping"))
             .pauseWhen(signal)
-
-        // FIXME: this is how it should be, pending Fs2 bug
-        //Stream
-        //.repeatEval(IO.println("ping"))
-        //.pauseWhen(signal)
-        //.metered(1.second)
+            .metered(1.second)
 
         val pause =
           Stream
