@@ -7,16 +7,16 @@ object Dependencies {
     val catsEffect = "3.1.1"
     val catsMtl    = "1.2.1"
     val derevo     = "0.12.5"
-    val fs2        = "3.0.3"
+    val fs2        = "3.0.4"
     val monocle    = "3.0.0-RC2"
     val newtype    = "0.4.4"
-    val refined    = "0.9.25"
+    val refined    = "0.9.26"
     val tofu       = "0.10.2"
 
     val betterMonadicFor = "0.3.1"
-    val kindProjector    = "0.12.0"
+    val kindProjector    = "0.13.0"
     val organizeImports  = "0.5.0"
-    val semanticDB       = "4.4.17"
+    val semanticDB       = "4.4.20"
   }
 
   object Libraries {
