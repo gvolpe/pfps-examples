@@ -8,7 +8,7 @@ object Dependencies {
     val catsMtl    = "1.2.1"
     val derevo     = "0.12.5"
     val fs2        = "3.0.3"
-    val monocle    = "3.0.0-M5"
+    val monocle    = "3.0.0-RC2"
     val newtype    = "0.4.4"
     val refined    = "0.9.25"
     val tofu       = "0.10.2"
@@ -38,8 +38,8 @@ object Dependencies {
 
     val newtype  = "io.estatico"       %% "newtype"        % V.newtype
 
-    val monocleCore  = "com.github.julien-truffaut" %% "monocle-core"  % V.monocle
-    val monocleMacro = "com.github.julien-truffaut" %% "monocle-macro" % V.monocle
+    val monocleCore  = "dev.optics" %% "monocle-core"  % V.monocle
+    val monocleMacro = "dev.optics" %% "monocle-macro" % V.monocle
 
     // Scalafix rules
     val organizeImports = "com.github.liancheng" %% "organize-imports" % V.organizeImports
