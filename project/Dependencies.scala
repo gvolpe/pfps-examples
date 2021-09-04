@@ -14,7 +14,7 @@ object Dependencies {
     val tofu       = "0.10.3"
 
     val betterMonadicFor = "0.3.1"
-    val kindProjector    = "0.13.1"
+    val kindProjector    = "0.13.2"
     val organizeImports  = "0.5.0"
     val semanticDB       = "4.4.26"
   }
