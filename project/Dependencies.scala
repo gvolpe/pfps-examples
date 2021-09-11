@@ -11,7 +11,7 @@ object Dependencies {
     val monocle    = "3.1.0"
     val newtype    = "0.4.4"
     val refined    = "0.9.27"
-    val tofu       = "0.10.3"
+    val tofu       = "0.10.4"
 
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.13.2"
