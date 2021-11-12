@@ -6,7 +6,7 @@ object Dependencies {
     val cats       = "2.6.1"
     val catsEffect = "3.2.9"
     val catsMtl    = "1.2.1"
-    val derevo     = "0.12.6"
+    val derevo     = "0.12.7"
     val fs2        = "3.2.2"
     val monocle    = "3.1.0"
     val newtype    = "0.4.4"
@@ -36,7 +36,7 @@ object Dependencies {
     val refinedCore = "eu.timepit" %% "refined"      % V.refined
     val refinedCats = "eu.timepit" %% "refined-cats" % V.refined
 
-    val newtype  = "io.estatico"       %% "newtype"        % V.newtype
+    val newtype = "io.estatico" %% "newtype" % V.newtype
 
     val monocleCore  = "dev.optics" %% "monocle-core"  % V.monocle
     val monocleMacro = "dev.optics" %% "monocle-macro" % V.monocle
