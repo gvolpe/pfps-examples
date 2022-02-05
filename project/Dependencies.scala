@@ -16,7 +16,7 @@ object Dependencies {
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.13.2"
     val organizeImports  = "0.5.0"
-    val semanticDB       = "4.4.29"
+    val semanticDB       = "4.4.34"
   }
 
   object Libraries {
@@ -36,7 +36,7 @@ object Dependencies {
     val refinedCore = "eu.timepit" %% "refined"      % V.refined
     val refinedCats = "eu.timepit" %% "refined-cats" % V.refined
 
-    val newtype  = "io.estatico"       %% "newtype"        % V.newtype
+    val newtype = "io.estatico" %% "newtype" % V.newtype
 
     val monocleCore  = "dev.optics" %% "monocle-core"  % V.monocle
     val monocleMacro = "dev.optics" %% "monocle-macro" % V.monocle
